@@ -208,7 +208,7 @@
   <section id="work">
     <p class="eyebrow">Featured work</p>
     <h2 class="h2">What I've built</h2>
-    <p class="sub">Two products I built end to end — data model through deployed UI.</p>
+    <p class="sub">Built end to end — data model through deployed UI.</p>
 
     <!-- FLOWDESK -->
     <div class="feature-card">
@@ -252,6 +252,49 @@
           Frontend and backend deploy independently on Render; production data lives on Supabase Postgres.
           Every request is scoped to the caller's organisation, with role-based permissions enforced per module.
         </p>
+      </div>
+    </div>
+
+    <!-- PAYMENT VERIFICATION CONSOLE -->
+    <div class="feature-card">
+      <div class="feature-head">
+        <div>
+          <h3>Payment Verification Console</h3>
+          <p>UPI payments aren't auto-confirmed by a webhook here — someone has to look at the bank statement.
+            This is that someone's tool: a separate, platform-wide app (its own repo, own deploy) where the person
+            holding the account reviews every organisation's submitted payment, verifies or rejects it with a reason,
+            and pulls the invoice.</p>
+          <div class="badge-row">
+            <span class="chip">React (Vite)</span><span class="chip">Same JWT auth as Flowdesk</span>
+            <span class="chip">SUPER_ADMIN-gated</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tour">
+        <h4>What it does</h4>
+        <div class="modgrid" style="grid-template-columns:repeat(2,1fr);">
+          <div class="mod" style="border:1px solid var(--border);border-radius:12px;padding:16px 18px;background:var(--bg);">
+            <b style="display:block;font-size:14.5px;margin-bottom:5px;">Platform-wide queue</b>
+            <p style="margin:0;font-size:13px;color:var(--muted);line-height:1.5;">Awaiting review / Verified / Rejected / Not paid yet / All — every organisation's payments in one place, not scoped to one tenant.</p>
+          </div>
+          <div class="mod" style="border:1px solid var(--border);border-radius:12px;padding:16px 18px;background:var(--bg);">
+            <b style="display:block;font-size:14.5px;margin-bottom:5px;">Verify or reject</b>
+            <p style="margin:0;font-size:13px;color:var(--muted);line-height:1.5;">One click to verify against the UTR and screenshot proof; rejecting requires a reason, shown back to the organisation.</p>
+          </div>
+          <div class="mod" style="border:1px solid var(--border);border-radius:12px;padding:16px 18px;background:var(--bg);">
+            <b style="display:block;font-size:14.5px;margin-bottom:5px;">Invoice on demand</b>
+            <p style="margin:0;font-size:13px;color:var(--muted);line-height:1.5;">Pulls the matching invoice for any payment — verified, rejected, or still pending — straight from the same billing data Flowdesk generates.</p>
+          </div>
+          <div class="mod" style="border:1px solid var(--border);border-radius:12px;padding:16px 18px;background:var(--bg);">
+            <b style="display:block;font-size:14.5px;margin-bottom:5px;">Shared auth, separate app</b>
+            <p style="margin:0;font-size:13px;color:var(--muted);line-height:1.5;">Logs in against Flowdesk's own auth endpoint, then refuses anyone whose role isn't SUPER_ADMIN — a deliberately small, separate deployable.</p>
+          </div>
+        </div>
+        <div class="m-shots" style="margin-top:14px;">
+          <div class="shot" data-full="assets/shots/pv-login.png"><img src="assets/shots/pv-login.png" alt="Payment verification sign-in"><div class="cap">Sign in</div></div>
+          <div class="shot" data-full="assets/shots/pv-all-tab.png"><img src="assets/shots/pv-all-tab.png" alt="Payment queue across all organisations"><div class="cap">Cross-org payment queue</div></div>
+        </div>
       </div>
     </div>
 
@@ -510,6 +553,21 @@
       ],
       shots:[{src:"assets/shots/reimbursement.png", cap:"Reimbursement analytics"}]
     },
+    { id:"subscription", title:"Subscription & Billing", thumb:"assets/shots/subscription-plans.png",
+      blurb:"The self-serve side of Flowdesk's own billing — a plan picker with modular add-ons, a generated UPI QR to pay, and a branded invoice.",
+      features:[
+        "4 plans (Starter / Growth / Enterprise + an internal test plan), each with its own included modules",
+        "Per-plan add-on modules, billed independently of the base plan",
+        "Monthly / yearly billing toggle",
+        "UPI QR generated per payment, with UTR + payment-screenshot proof upload",
+        "Branded invoice per payment, marked pending until a human verifies it"
+      ],
+      shots:[
+        {src:"assets/shots/subscription-plans.png", cap:"Plan picker & add-ons"},
+        {src:"assets/shots/subscription-payment-panel.png", cap:"UPI QR + proof upload"},
+        {src:"assets/shots/billing-invoice.png", cap:"Generated invoice"}
+      ]
+    },
     { id:"settings", title:"Org Settings", thumb:"assets/shots/settings.png",
       blurb:"Everything that shapes how the rest of the system behaves — departments, branches, shifts, holidays, skills and roles.",
       features:[
@@ -546,9 +604,6 @@
       `).join('')}</div>
     `;
     modalContent.querySelector('.m-close').addEventListener('click', closeModule);
-    modalContent.querySelectorAll('.shot').forEach(el=>{
-      el.addEventListener('click', () => openLightbox(el.getAttribute('data-full')));
-    });
     modalOverlay.classList.add('open');
   }
   function closeModule(){ modalOverlay.classList.remove('open'); }
@@ -558,6 +613,12 @@
   const lbImg = document.getElementById('lightbox-img');
   function openLightbox(src){ lbImg.src = src; lb.classList.add('open'); }
   lb.addEventListener('click', () => lb.classList.remove('open'));
+
+  // Delegated: any .shot[data-full] on the page (not just inside the modal) opens the lightbox.
+  document.addEventListener('click', (e) => {
+    const shot = e.target.closest('.shot[data-full]');
+    if (shot) openLightbox(shot.getAttribute('data-full'));
+  });
 
   document.addEventListener('keydown', (e) => {
     if(e.key === 'Escape'){ closeModule(); lb.classList.remove('open'); }
