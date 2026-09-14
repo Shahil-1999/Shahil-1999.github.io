@@ -308,8 +308,8 @@
             matching React frontend.</p>
           <div class="badge-row">
             <span class="chip">React (CRA)</span><span class="chip">Node.js</span><span class="chip">Express</span>
-            <span class="chip">Sequelize + MySQL</span><span class="chip">JWT · refresh-token rotation</span>
-            <span class="chip">AWS S3</span><span class="chip">ESLint + Husky</span>
+            <span class="chip">Sequelize + PostgreSQL</span><span class="chip">JWT · refresh-token rotation</span>
+            <span class="chip">AWS S3</span><span class="chip">Redis</span><span class="chip">ESLint + Husky</span>
           </div>
         </div>
       </div>
@@ -319,7 +319,7 @@
         <div class="modgrid" style="grid-template-columns:repeat(2,1fr);">
           <div class="mod" style="border:1px solid var(--border);border-radius:12px;padding:16px 18px;background:var(--bg);">
             <b style="display:block;font-size:14.5px;margin-bottom:5px;">Accounts &amp; sessions</b>
-            <p style="margin:0;font-size:13px;color:var(--muted);line-height:1.5;">JWT access tokens with rotating refresh tokens, stored per-device, so a stolen refresh token can be revoked without logging everyone out.</p>
+            <p style="margin:0;font-size:13px;color:var(--muted);line-height:1.5;">JWT access tokens allowlisted in Redis (instant revocation) plus rotating refresh tokens stored per-device, so a stolen refresh token can be revoked without logging everyone out.</p>
           </div>
           <div class="mod" style="border:1px solid var(--border);border-radius:12px;padding:16px 18px;background:var(--bg);">
             <b style="display:block;font-size:14.5px;margin-bottom:5px;">Posts &amp; comments</b>
@@ -334,6 +334,14 @@
             <p style="margin:0;font-size:13px;color:var(--muted);line-height:1.5;">A subscription model behind the feed, for gating premium behaviour.</p>
           </div>
         </div>
+        <div class="m-shots" style="margin-top:14px;">
+          <div class="shot" data-full="assets/shots/pf-register.png"><img src="assets/shots/pf-register.png" alt="Post Feed registration screen"><div class="cap">Register</div></div>
+          <div class="shot" data-full="assets/shots/pf-login.png"><img src="assets/shots/pf-login.png" alt="Post Feed login screen"><div class="cap">Sign in</div></div>
+          <div class="shot" data-full="assets/shots/pf-create-post.png"><img src="assets/shots/pf-create-post.png" alt="Composing a post with a live preview"><div class="cap">Compose, with live preview</div></div>
+          <div class="shot" data-full="assets/shots/pf-feed.png"><img src="assets/shots/pf-feed.png" alt="Feed with a post and a comment thread"><div class="cap">Feed &amp; comments</div></div>
+          <div class="shot" data-full="assets/shots/pf-own-posts.png"><img src="assets/shots/pf-own-posts.png" alt="Managing your own posts"><div class="cap">My posts</div></div>
+          <div class="shot" data-full="assets/shots/pf-profile.png"><img src="assets/shots/pf-profile.png" alt="User profile with subscription status"><div class="cap">Profile</div></div>
+        </div>
       </div>
 
       <div class="tour">
@@ -341,7 +349,8 @@
         <div class="arch">
           <span class="node">React (CRA) SPA</span><span class="arrow">→ REST/JSON →</span>
           <span class="node">Express API</span><span class="arrow">→</span>
-          <span class="node">MySQL (Sequelize)</span><span class="arrow">+</span>
+          <span class="node">PostgreSQL (Sequelize)</span><span class="arrow">+</span>
+          <span class="node">Redis (sessions)</span><span class="arrow">+</span>
           <span class="node">AWS S3 (images)</span>
         </div>
       </div>
