@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Shahil Kumar Chourasia — Full-Stack Developer</title>
+<meta name="description" content="Full-stack developer building production SaaS products end-to-end. Featured work: Flowdesk, a multi-tenant HRMS platform." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230f172a'/%3E%3Ctext x='50' y='68' font-size='58' font-family='system-ui,sans-serif' font-weight='700' fill='%2338bdf8' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E" />
+<style>
+  :root{
+    --bg:#f7f8fb;
+    --bg-alt:#ffffff;
+    --ink:#12141c;
+    --ink-soft:#4a5063;
+    --muted:#6b7180;
+    --border:#e4e6ee;
+    --accent:#2563eb;
+    --accent-ink:#ffffff;
+    --accent-soft:#eaf0ff;
+    --chip-bg:#eef0f6;
+    --shadow: 0 1px 2px rgba(20,24,40,.04), 0 8px 24px -12px rgba(20,24,40,.12);
+    --radius:14px;
+    --code-bg:#0f1320;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0b0d14;
+      --bg-alt:#12141d;
+      --ink:#eef0f6;
+      --ink-soft:#c3c7d6;
+      --muted:#8b91a3;
+      --border:#232635;
+      --accent:#5b9dff;
+      --accent-ink:#0b0d14;
+      --accent-soft:#16223f;
+      --chip-bg:#1a1d2b;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px -12px rgba(0,0,0,.55);
+      --code-bg:#05070c;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0b0d14;
+    --bg-alt:#12141d;
+    --ink:#eef0f6;
+    --ink-soft:#c3c7d6;
+    --muted:#8b91a3;
+    --border:#232635;
+    --accent:#5b9dff;
+    --accent-ink:#0b0d14;
+    --accent-soft:#16223f;
+    --chip-bg:#1a1d2b;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px -12px rgba(0,0,0,.55);
+    --code-bg:#05070c;
+    color-scheme: dark;
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+    line-height:1.55;
+    padding-bottom: 40px;
+  }
+  a{ color:inherit; }
+  img{ max-width:100%; display:block; }
+  .wrap{ max-width:1080px; margin:0 auto; padding-inline:24px; }
+
+  /* Nav */
+  header.nav{
+    position:sticky; top:0; z-index:20;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{
+    max-width:1080px; margin:0 auto; padding:14px 24px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{ font-weight:700; letter-spacing:-.02em; font-size:15px; text-decoration:none; display:flex; gap:8px; align-items:center;}
+  .brand .dot{ width:9px;height:9px;border-radius:50%; background:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+  nav.links{ display:flex; gap:22px; font-size:14px; }
+  nav.links a{ text-decoration:none; color:var(--ink-soft); }
+  nav.links a:hover{ color:var(--ink); }
+
+  /* Hero */
+  .hero{ padding:76px 0 56px; }
+  .kicker{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:12.5px; font-weight:600; letter-spacing:.02em;
+    color:var(--accent); background:var(--accent-soft);
+    padding:6px 12px; border-radius:999px; margin-bottom:20px;
+  }
+  h1.title{
+    font-size:clamp(32px,5vw,52px);
+    line-height:1.08;
+    letter-spacing:-.03em;
+    margin:0 0 18px;
+    font-weight:700;
+  }
+  h1.title span{ color:var(--muted); font-weight:600; }
+  p.lede{
+    font-size:18px; color:var(--ink-soft); max-width:640px; margin:0 0 30px;
+  }
+  .cta-row{ display:flex; gap:12px; flex-wrap:wrap; }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:11px 18px; border-radius:10px; font-size:14.5px; font-weight:600;
+    text-decoration:none; border:1px solid var(--border); transition:transform .15s ease, background .15s ease;
+  }
+  .btn:hover{ transform: translateY(-1px); }
+  .btn.primary{ background:var(--ink); color:var(--bg); border-color:var(--ink); }
+  .btn.ghost{ background:var(--bg-alt); color:var(--ink); }
+
+  /* Section shell */
+  section{ padding:64px 0; border-top:1px solid var(--border); }
+  section.hero{ border-top:none; }
+  .eyebrow{
+    font-size:12.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); margin:0 0 10px;
+  }
+  h2.h2{ font-size:28px; letter-spacing:-.02em; margin:0 0 12px; font-weight:700; }
+  p.sub{ color:var(--ink-soft); max-width:620px; margin:0 0 34px; font-size:15.5px; }
+
+  /* Featured project card */
+  .feature-card{
+    background:var(--bg-alt); border:1px solid var(--border); border-radius:20px;
+    padding:32px; box-shadow:var(--shadow);
+  }
+  .feature-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:24px; flex-wrap:wrap; margin-bottom:20px;}
+  .feature-head h3{ font-size:24px; margin:0 0 8px; letter-spacing:-.02em; }
+  .feature-head p{ margin:0; color:var(--ink-soft); max-width:520px; font-size:15px;}
+  .badge-row{ display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 0; }
+  .chip{
+    font-size:12.5px; font-weight:600; padding:5px 11px; border-radius:999px;
+    background:var(--chip-bg); color:var(--ink-soft); border:1px solid var(--border);
+  }
+  .links-row{ display:flex; gap:10px; flex-wrap:wrap; }
+
+  .stat-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+    background:var(--border); border:1px solid var(--border); border-radius:14px;
+    overflow:hidden; margin:26px 0;
+  }
+  .stat{ background:var(--bg-alt); padding:18px 16px; text-align:left; }
+  .stat b{ display:block; font-size:22px; letter-spacing:-.02em; }
+  .stat span{ font-size:12.5px; color:var(--muted); }
+
+  /* Gallery */
+  .gallery{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:26px 0 8px;
+  }
+  .shot{
+    border:1px solid var(--border); border-radius:12px; overflow:hidden; background:var(--bg);
+    cursor:zoom-in; position:relative;
+  }
+  .shot img{ width:100%; height:170px; object-fit:cover; object-position:top; transition:transform .35s ease; }
+  .shot:hover img{ transform:scale(1.04); }
+  .shot .cap{
+    font-size:12px; font-weight:600; color:var(--ink-soft); padding:8px 12px; border-top:1px solid var(--border);
+  }
+
+  /* module tour */
+  .tour{ margin-top:34px; }
+  .tour h4{ font-size:15.5px; margin:0 0 14px; color:var(--ink-soft); font-weight:700; letter-spacing:.01em; text-transform:uppercase; font-size:12.5px;}
+  .modgrid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .mod{
+    border:1px solid var(--border); border-radius:12px; padding:16px 18px; background:var(--bg);
+  }
+  .mod b{ display:block; font-size:14.5px; margin-bottom:5px; }
+  .mod p{ margin:0; font-size:13px; color:var(--muted); line-height:1.5; }
+
+  /* architecture */
+  .arch{
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:28px;
+    font-size:13.5px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  .arch .node{
+    border:1px solid var(--border); background:var(--bg); padding:10px 14px; border-radius:10px; color:var(--ink-soft);
+  }
+  .arch .arrow{ color:var(--muted); }
+
+  /* other projects */
+  .grid3{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .pcard{
+    border:1px solid var(--border); border-radius:14px; padding:20px; background:var(--bg-alt);
+    text-decoration:none; color:var(--ink); transition:transform .15s ease, border-color .15s ease;
+  }
+  .pcard:hover{ transform:translateY(-2px); border-color:var(--accent); }
+  .pcard b{ display:block; font-size:15px; margin-bottom:6px; }
+  .pcard span{ font-size:12.5px; color:var(--muted); }
+
+  /* about */
+  .about-grid{ display:grid; grid-template-columns:1.3fr 1fr; gap:40px; align-items:start; }
+  .skill-group{ margin-bottom:18px; }
+  .skill-group h5{ font-size:12.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:0 0 10px; }
+  .skill-chips{ display:flex; flex-wrap:wrap; gap:8px; }
+
+  /* contact */
+  .contact-card{
+    background:var(--bg-alt); border:1px solid var(--border); border-radius:20px; padding:40px;
+    text-align:center; box-shadow:var(--shadow);
+  }
+  .contact-card h2{ margin-top:0; }
+  .contact-links{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:22px; }
+
+  footer{ text-align:center; padding:36px 0 8px; color:var(--muted); font-size:13px; }
+
+  /* lightbox */
+  #lightbox{
+    position:fixed; inset:0; background:rgba(6,8,14,.86); display:none;
+    align-items:center; justify-content:center; z-index:100; padding:24px;
+  }
+  #lightbox.open{ display:flex; }
+  #lightbox img{ max-width:min(1200px,92vw); max-height:88vh; border-radius:10px; box-shadow:0 30px 80px rgba(0,0,0,.5); }
+  #lightbox .close{
+    position:absolute; top:22px; right:28px; color:#fff; font-size:28px; cursor:pointer; opacity:.8;
+  }
+  #lightbox .close:hover{ opacity:1; }
+
+  @media (max-width: 760px){
+    .stat-grid{ grid-template-columns:repeat(2,1fr); }
+    .gallery{ grid-template-columns:repeat(2,1fr); }
+    .modgrid{ grid-template-columns:1fr; }
+    .grid3{ grid-template-columns:1fr; }
+    .about-grid{ grid-template-columns:1fr; }
+    nav.links{ gap:14px; }
+    .feature-card{ padding:22px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top"><span class="dot"></span> Shahil Kumar Chourasia</a>
+    <nav class="links">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap" id="top">
+
+  <section class="hero">
+    <div class="kicker">Available for opportunities</div>
+    <h1 class="title">Full-stack developer.<br><span>I build products that ship, and platforms that scale.</span></h1>
+    <p class="lede">
+      I design and build complete web applications end to end — React front ends, Node/Express APIs,
+      relational data models, auth and billing, deployed and running in production. My flagship project,
+      Flowdesk, is a multi-tenant HR platform used to run real payroll, attendance, and employee lifecycles.
+    </p>
+    <div class="cta-row">
+      <a class="btn primary" href="#work">View my work</a>
+      <a class="btn ghost" href="https://github.com/Shahil-1999" target="_blank" rel="noopener">GitHub ↗</a>
+      <a class="btn ghost" href="mailto:kshahil1999@gmail.com">Email me</a>
+    </div>
+  </section>
+
+  <section id="work">
+    <p class="eyebrow">Featured work</p>
+    <h2 class="h2">Flowdesk HRMS</h2>
+    <p class="sub">A production, multi-tenant HR management platform — attendance, leave, payroll, employee
+      lifecycle (onboarding through separation), projects &amp; tasks, reimbursements, and subscription billing —
+      built solo across frontend, backend, and infrastructure.</p>
+
+    <div class="feature-card">
+      <div class="feature-head">
+        <div>
+          <h3>Flowdesk</h3>
+          <p>Companies use it to run their entire HR operation: track who's in, approve leave, run payroll,
+             manage the employee lifecycle, and bill their own subscription — all from one dashboard, scoped
+             per organisation.</p>
+          <div class="badge-row">
+            <span class="chip">React 19</span>
+            <span class="chip">Vite</span>
+            <span class="chip">Tailwind CSS 4</span>
+            <span class="chip">Express 5</span>
+            <span class="chip">PostgreSQL + Sequelize</span>
+            <span class="chip">JWT auth · RBAC</span>
+            <span class="chip">Cloudflare R2</span>
+            <span class="chip">Render</span>
+          </div>
+        </div>
+        <div class="links-row">
+          <a class="btn primary" href="https://flowdesk-hrms-frontend.onrender.com" target="_blank" rel="noopener">Live demo ↗</a>
+          <a class="btn ghost" href="https://github.com/Shahil-1999/flowdesk-hrms_frontend" target="_blank" rel="noopener">View source ↗</a>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat"><b>~67.5k</b><span>lines of frontend code</span></div>
+        <div class="stat"><b>97</b><span>page components</span></div>
+        <div class="stat"><b>12+</b><span>HR modules</span></div>
+        <div class="stat"><b>56+</b><span>commits, solo-built</span></div>
+      </div>
+
+      <div class="gallery" id="gallery">
+        <div class="shot" data-full="assets/shots/dashboard.png"><img src="assets/shots/dashboard.png" alt="Flowdesk dashboard with attendance, leave, and reimbursement analytics"><div class="cap">Admin dashboard</div></div>
+        <div class="shot" data-full="assets/shots/attendance.png"><img src="assets/shots/attendance.png" alt="Attendance module with monthly trend chart"><div class="cap">Attendance &amp; regularisation</div></div>
+        <div class="shot" data-full="assets/shots/payroll.png"><img src="assets/shots/payroll.png" alt="Payroll module hub"><div class="cap">Payroll &amp; payslips</div></div>
+        <div class="shot" data-full="assets/shots/leave.png"><img src="assets/shots/leave.png" alt="Leave management hub"><div class="cap">Leave management</div></div>
+        <div class="shot" data-full="assets/shots/projects.png"><img src="assets/shots/projects.png" alt="Projects tracker table"><div class="cap">Projects &amp; tasks</div></div>
+        <div class="shot" data-full="assets/shots/reimbursement.png"><img src="assets/shots/reimbursement.png" alt="Reimbursement claims analytics"><div class="cap">Reimbursements</div></div>
+      </div>
+
+      <div class="tour">
+        <h4>What it does</h4>
+        <div class="modgrid">
+          <div class="mod"><b>Employee lifecycle</b><p>Onboarding, grades, confirmation letters, separation &amp; exit interviews, all with approval workflows.</p></div>
+          <div class="mod"><b>Attendance &amp; leave</b><p>Biometric import, regularisation requests with manager approval, configurable leave categories and balances.</p></div>
+          <div class="mod"><b>Payroll &amp; compliance</b><p>CTC calculation, grade-based salary components, payslip generation, PF/ESI/PTax and bank-transfer reports.</p></div>
+          <div class="mod"><b>Projects &amp; tasks</b><p>Kanban/Scrum workflows, sprints, custom fields, worklogs, and git-provider integrations per project.</p></div>
+          <div class="mod"><b>Reimbursements</b><p>Claim submission, approval routing, and spend analytics by category.</p></div>
+          <div class="mod"><b>Multi-tenant billing</b><p>Plans, add-on modules, UPI-based subscription payments, and generated invoices per organisation.</p></div>
+        </div>
+      </div>
+
+      <div class="tour">
+        <h4>Architecture</h4>
+        <div class="arch">
+          <span class="node">React SPA (Vite)</span>
+          <span class="arrow">→ REST/JSON →</span>
+          <span class="node">Express 5 API</span>
+          <span class="arrow">→</span>
+          <span class="node">PostgreSQL (Sequelize)</span>
+          <span class="arrow">+</span>
+          <span class="node">Cloudflare R2 (files)</span>
+        </div>
+        <p class="sub" style="margin-top:16px;font-size:13.5px;">
+          Frontend and backend deploy independently on Render; production data lives on Supabase Postgres.
+          Every request is scoped to the caller's organisation, with role-based permissions enforced per module.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="other-work">
+    <p class="eyebrow">Also on GitHub</p>
+    <h2 class="h2">Other projects</h2>
+    <p class="sub">Smaller builds spanning a few different backend stacks and a game, for range.</p>
+    <div class="grid3">
+      <a class="pcard" href="https://github.com/Shahil-1999/multischool-erp-system" target="_blank" rel="noopener">
+        <b>Multischool ERP System</b><span>JavaScript</span>
+      </a>
+      <a class="pcard" href="https://github.com/Shahil-1999/employee-management-system" target="_blank" rel="noopener">
+        <b>Employee Management System</b><span>JavaScript</span>
+      </a>
+      <a class="pcard" href="https://github.com/Shahil-1999/multiplayer-wave-shooting-game" target="_blank" rel="noopener">
+        <b>Multiplayer Wave-Shooting Game</b><span>JavaScript</span>
+      </a>
+    </div>
+  </section>
+
+  <section id="about">
+    <p class="eyebrow">About</p>
+    <h2 class="h2">How I work</h2>
+    <div class="about-grid">
+      <p class="sub" style="font-size:15.5px;margin-bottom:0;">
+        I like owning things end to end — schema design, API contracts, the UI that sits on top of them, and the
+        deploy pipeline that ships it. Flowdesk started as a single HR tool and grew into a multi-tenant SaaS
+        product with its own billing, because that's the kind of problem I enjoy: real workflows, real data,
+        real constraints.
+      </p>
+      <div>
+        <div class="skill-group">
+          <h5>Frontend</h5>
+          <div class="skill-chips">
+            <span class="chip">React</span><span class="chip">Vite</span><span class="chip">Tailwind CSS</span><span class="chip">React Router</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h5>Backend</h5>
+          <div class="skill-chips">
+            <span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">Sequelize</span><span class="chip">NestJS</span><span class="chip">Hapi</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h5>Data &amp; infra</h5>
+          <div class="skill-chips">
+            <span class="chip">PostgreSQL</span><span class="chip">Supabase</span><span class="chip">Cloudflare R2</span><span class="chip">Render</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="contact-card">
+      <p class="eyebrow" style="justify-content:center;display:flex;">Get in touch</p>
+      <h2 class="h2">Let's build something.</h2>
+      <p class="sub" style="margin:0 auto;">Open to full-stack roles and freelance work.</p>
+      <div class="contact-links">
+        <a class="btn primary" href="mailto:kshahil1999@gmail.com">kshahil1999@gmail.com</a>
+        <a class="btn ghost" href="https://github.com/Shahil-1999" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>© <span id="yr"></span> Shahil Kumar Chourasia. Built with plain HTML/CSS, deployed on GitHub Pages.</footer>
+
+<div id="lightbox"><span class="close">&times;</span><img id="lightbox-img" src="" alt=""></div>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  document.querySelectorAll('.shot').forEach(el => {
+    el.addEventListener('click', () => {
+      lbImg.src = el.getAttribute('data-full');
+      lb.classList.add('open');
+    });
+  });
+  lb.addEventListener('click', () => lb.classList.remove('open'));
+</script>
+
+</body>
+</html>
