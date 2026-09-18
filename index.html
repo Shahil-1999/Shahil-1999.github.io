@@ -10,18 +10,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#f5f0e6; --bg-alt:#fffdf8; --ink:#211d19; --ink-soft:#54493d; --muted:#8b7f6f;
-    --border:#ddd0ba; --accent:#a83e1c; --accent-soft:#f0dcc9; --rule:#cabb9f;
-    color-scheme: light;
-  }
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){
-      --bg:#18140f; --bg-alt:#211b15; --ink:#f1e9db; --ink-soft:#c6b8a4; --muted:#8f8271;
-      --border:#3a3225; --accent:#e2854f; --accent-soft:#2c2114; --rule:#453b2c;
-      color-scheme: dark;
-    }
-  }
-  :root[data-theme="dark"]{
     --bg:#18140f; --bg-alt:#211b15; --ink:#f1e9db; --ink-soft:#c6b8a4; --muted:#8f8271;
     --border:#3a3225; --accent:#e2854f; --accent-soft:#2c2114; --rule:#453b2c;
     color-scheme: dark;
@@ -183,6 +171,26 @@
   .m-shots .shot img{ width:100%; height:100px; object-fit:cover; object-position:top; filter:grayscale(.15); }
   .m-shots .shot .cap{ font-size:10px; font-weight:600; color:var(--muted); padding:6px 8px; border-top:1px solid var(--border); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 
+  /* Scroll reveal */
+  .reveal{ opacity:0; transform:translateY(22px); transition:opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+  .reveal.in-view{ opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+  }
+
+  /* Custom cursor */
+  #cursor-dot, #cursor-ring{
+    position:fixed; top:0; left:0; pointer-events:none; border-radius:50%;
+    z-index:200; transform:translate(-50%,-50%); opacity:0;
+    transition:opacity .2s ease, width .25s ease, height .25s ease, background .25s ease;
+  }
+  #cursor-dot{ width:6px; height:6px; background:var(--accent); }
+  #cursor-ring{ width:30px; height:30px; border:1px solid var(--accent); }
+  #cursor-ring.hover{ width:50px; height:50px; background:color-mix(in srgb, var(--accent) 14%, transparent); }
+  html.has-cursor #cursor-dot, html.has-cursor #cursor-ring{ opacity:1; }
+  html.has-cursor, html.has-cursor a, html.has-cursor button, html.has-cursor .modcard,
+  html.has-cursor .shot, html.has-cursor .m-close, html.has-cursor .close{ cursor:none; }
+
   @media (max-width: 760px){
     .hero-grid{ grid-template-columns:1fr; }
     .hero-meta{ border-left:none; padding-left:0; border-top:1px solid var(--border); padding-top:20px; }
@@ -196,6 +204,9 @@
 </style>
 </head>
 <body>
+
+<div id="cursor-dot" aria-hidden="true"></div>
+<div id="cursor-ring" aria-hidden="true"></div>
 
 <header class="nav">
   <div class="nav-inner">
@@ -664,6 +675,58 @@
   document.addEventListener('keydown', (e) => {
     if(e.key === 'Escape'){ closeModule(); lb.classList.remove('open'); }
   });
+
+  // Custom cursor — a trailing dot + ring, disabled on touch devices.
+  (function(){
+    const isTouch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    if(isTouch) return;
+    document.documentElement.classList.add('has-cursor');
+    const dot = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    let mx = innerWidth/2, my = innerHeight/2, rx = mx, ry = my;
+    window.addEventListener('mousemove', (e) => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+    });
+    (function loop(){
+      rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18;
+      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+      requestAnimationFrame(loop);
+    })();
+    document.addEventListener('mouseover', (e) => {
+      if(e.target.closest('a, button, .modcard, .shot')) ring.classList.add('hover');
+    });
+    document.addEventListener('mouseout', (e) => {
+      if(e.target.closest('a, button, .modcard, .shot')) ring.classList.remove('hover');
+    });
+  })();
+
+  // Scroll-reveal — sections, case studies and cards fade/slide in as they enter view.
+  (function(){
+    const targets = document.querySelectorAll(
+      '.hero .idx, .hero h1.title, .hero p.role, .hero p.lede, .hero .cta-row, .hero-meta, ' +
+      '.sec-head, .feature-card, .prow, .xp, .about-grid > div, .contact-block, .modcard'
+    );
+    targets.forEach((el, i) => {
+      el.classList.add('reveal');
+      if(el.classList.contains('modcard') || el.classList.contains('prow')){
+        el.style.transitionDelay = (i % 8) * 45 + 'ms';
+      }
+    });
+    if('IntersectionObserver' in window){
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if(entry.isIntersecting){
+            entry.target.classList.add('in-view');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      targets.forEach((el) => io.observe(el));
+    } else {
+      targets.forEach((el) => el.classList.add('in-view'));
+    }
+  })();
 </script>
 
 </body>
