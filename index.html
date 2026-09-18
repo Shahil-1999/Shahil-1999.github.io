@@ -5,169 +5,189 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Shahil Kumar Chourasia — Backend-Focused Full-Stack Developer</title>
 <meta name="description" content="Backend-focused full-stack developer. Featured work: Flowdesk (multi-tenant HRMS) and a social post-feed platform." />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230f172a'/%3E%3Ctext x='50' y='68' font-size='58' font-family='system-ui,sans-serif' font-weight='700' fill='%2338bdf8' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='6' fill='%23211d1a'/%3E%3Ctext x='50' y='70' font-size='56' font-family='Georgia,serif' font-weight='700' fill='%23e0763f' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#f7f8fb; --bg-alt:#ffffff; --ink:#12141c; --ink-soft:#4a5063; --muted:#6b7180;
-    --border:#e4e6ee; --accent:#2563eb; --accent-soft:#eaf0ff; --chip-bg:#eef0f6;
-    --shadow: 0 1px 2px rgba(20,24,40,.04), 0 8px 24px -12px rgba(20,24,40,.12);
+    --bg:#f5f0e6; --bg-alt:#fffdf8; --ink:#211d19; --ink-soft:#54493d; --muted:#8b7f6f;
+    --border:#ddd0ba; --accent:#a83e1c; --accent-soft:#f0dcc9; --rule:#cabb9f;
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg:#0b0d14; --bg-alt:#12141d; --ink:#eef0f6; --ink-soft:#c3c7d6; --muted:#8b91a3;
-      --border:#232635; --accent:#5b9dff; --accent-soft:#16223f; --chip-bg:#1a1d2b;
-      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px -12px rgba(0,0,0,.55);
+      --bg:#18140f; --bg-alt:#211b15; --ink:#f1e9db; --ink-soft:#c6b8a4; --muted:#8f8271;
+      --border:#3a3225; --accent:#e2854f; --accent-soft:#2c2114; --rule:#453b2c;
       color-scheme: dark;
     }
   }
   :root[data-theme="dark"]{
-    --bg:#0b0d14; --bg-alt:#12141d; --ink:#eef0f6; --ink-soft:#c3c7d6; --muted:#8b91a3;
-    --border:#232635; --accent:#5b9dff; --accent-soft:#16223f; --chip-bg:#1a1d2b;
-    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px -12px rgba(0,0,0,.55);
+    --bg:#18140f; --bg-alt:#211b15; --ink:#f1e9db; --ink-soft:#c6b8a4; --muted:#8f8271;
+    --border:#3a3225; --accent:#e2854f; --accent-soft:#2c2114; --rule:#453b2c;
     color-scheme: dark;
   }
 
   *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
   body{
     margin:0; background:var(--bg); color:var(--ink);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
-    line-height:1.55; padding-bottom: 40px;
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height:1.6; padding-bottom: 40px; font-size:15.5px;
   }
   a{ color:inherit; } img{ max-width:100%; display:block; }
-  .wrap{ max-width:1080px; margin:0 auto; padding-inline:24px; }
+  .wrap{ max-width:1040px; margin:0 auto; padding-inline:24px; }
+  .serif{ font-family:"Fraunces", Georgia, serif; }
+  .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+  h1,h2,h3{ font-family:"Fraunces", Georgia, serif; font-weight:600; }
 
   header.nav{
     position:sticky; top:0; z-index:20;
-    background:color-mix(in srgb, var(--bg) 88%, transparent);
-    backdrop-filter: blur(10px); border-bottom:1px solid var(--border);
+    background:color-mix(in srgb, var(--bg) 90%, transparent);
+    backdrop-filter: blur(8px); border-bottom:1px solid var(--border);
   }
-  .nav-inner{ max-width:1080px; margin:0 auto; padding:14px 24px; display:flex; align-items:center; justify-content:space-between; }
-  .brand{ font-weight:700; letter-spacing:-.02em; font-size:15px; text-decoration:none; display:flex; gap:8px; align-items:center;}
-  .brand .dot{ width:9px;height:9px;border-radius:50%; background:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
-  nav.links{ display:flex; gap:22px; font-size:14px; }
-  nav.links a{ text-decoration:none; color:var(--ink-soft); }
-  nav.links a:hover{ color:var(--ink); }
+  .nav-inner{ max-width:1040px; margin:0 auto; padding:16px 24px; display:flex; align-items:baseline; justify-content:space-between; }
+  .brand{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:17px; text-decoration:none; letter-spacing:-.01em; }
+  nav.links{ display:flex; gap:24px; font-size:12.5px; }
+  nav.links a{ text-decoration:none; color:var(--ink-soft); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing:.03em; }
+  nav.links a:hover{ color:var(--accent); }
+  nav.links a .n{ color:var(--muted); margin-right:5px; }
 
-  .hero{ padding:76px 0 56px; }
-  .kicker{
-    display:inline-flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; letter-spacing:.02em;
-    color:var(--accent); background:var(--accent-soft); padding:6px 12px; border-radius:999px; margin-bottom:20px;
-  }
-  h1.title{ font-size:clamp(32px,5vw,50px); line-height:1.1; letter-spacing:-.03em; margin:0 0 18px; font-weight:700; }
-  h1.title span{ color:var(--muted); font-weight:600; }
-  p.lede{ font-size:18px; color:var(--ink-soft); max-width:660px; margin:0 0 30px; }
-  .cta-row{ display:flex; gap:12px; flex-wrap:wrap; }
+  /* Hero: asymmetric editorial layout, no pill/centered pattern */
+  .hero{ padding:64px 0 52px; border-top:none; }
+  .hero-grid{ display:grid; grid-template-columns: 1.5fr 1fr; gap:48px; align-items:end; }
+  .idx{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:12.5px; color:var(--accent);
+        letter-spacing:.08em; text-transform:uppercase; margin:0 0 16px; }
+  h1.title{ font-size:clamp(34px,5.4vw,58px); line-height:1.02; letter-spacing:-.02em; margin:0 0 6px; font-weight:600; }
+  p.role{ font-size:17px; color:var(--ink-soft); margin:10px 0 20px; font-style:italic; font-family:"Fraunces", Georgia, serif; }
+  p.lede{ font-size:15.5px; color:var(--ink-soft); max-width:520px; margin:0 0 28px; }
+  .cta-row{ display:flex; gap:22px; flex-wrap:wrap; align-items:center; }
   .btn{
-    display:inline-flex; align-items:center; gap:8px; padding:11px 18px; border-radius:10px; font-size:14.5px; font-weight:600;
-    text-decoration:none; border:1px solid var(--border); transition:transform .15s ease, background .15s ease; cursor:pointer;
-    background:var(--bg-alt); color:var(--ink); font-family:inherit;
+    display:inline-flex; align-items:center; gap:6px; font-size:14px; font-weight:600;
+    text-decoration:none; cursor:pointer; background:none; border:none; color:var(--ink); font-family:inherit;
+    padding:0; border-bottom:1px solid var(--ink);
   }
-  .btn:hover{ transform: translateY(-1px); }
-  .btn.primary{ background:var(--ink); color:var(--bg); border-color:var(--ink); }
-  .btn.small{ padding:7px 12px; font-size:13px; }
+  .btn:hover{ color:var(--accent); border-color:var(--accent); }
+  .btn.primary{ color:var(--accent); border-color:var(--accent); }
 
-  section{ padding:64px 0; border-top:1px solid var(--border); }
+  .hero-meta{ border-left:1px solid var(--border); padding-left:26px; }
+  .hero-meta div{ margin-bottom:16px; }
+  .hero-meta dt{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:11px; text-transform:uppercase;
+                 letter-spacing:.08em; color:var(--muted); margin:0 0 4px; }
+  .hero-meta dd{ margin:0; font-size:14.5px; }
+
+  section{ padding:58px 0; border-top:1px solid var(--border); }
   section.hero{ border-top:none; }
-  .eyebrow{ font-size:12.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin:0 0 10px; }
-  h2.h2{ font-size:28px; letter-spacing:-.02em; margin:0 0 12px; font-weight:700; }
-  p.sub{ color:var(--ink-soft); max-width:640px; margin:0 0 34px; font-size:15.5px; }
+  .sec-head{ display:flex; align-items:baseline; gap:14px; margin-bottom:8px; }
+  .sec-head .idx{ margin:0; }
+  h2.h2{ font-size:26px; letter-spacing:-.01em; margin:0; font-weight:600; }
+  p.sub{ color:var(--ink-soft); max-width:600px; margin:10px 0 32px; font-size:14.5px; }
 
+  /* Case-study blocks: flat, bordered, no shadow/heavy radius — dossier feel */
   .feature-card{
-    background:var(--bg-alt); border:1px solid var(--border); border-radius:20px; padding:32px; box-shadow:var(--shadow);
-    margin-bottom:28px;
+    background:var(--bg-alt); border:1px solid var(--border); border-radius:3px; padding:30px;
+    margin-bottom:24px; position:relative;
   }
-  .feature-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:24px; flex-wrap:wrap; margin-bottom:20px;}
-  .feature-head h3{ font-size:24px; margin:0 0 8px; letter-spacing:-.02em; }
-  .feature-head p{ margin:0; color:var(--ink-soft); max-width:540px; font-size:15px;}
-  .badge-row{ display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 0; }
-  .chip{ font-size:12.5px; font-weight:600; padding:5px 11px; border-radius:999px; background:var(--chip-bg); color:var(--ink-soft); border:1px solid var(--border); }
-  .links-row{ display:flex; gap:10px; flex-wrap:wrap; }
+  .feature-tag{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:11px; color:var(--accent);
+                text-transform:uppercase; letter-spacing:.08em; margin:0 0 10px; }
+  .feature-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:24px; flex-wrap:wrap; margin-bottom:18px;}
+  .feature-head h3{ font-size:23px; margin:0 0 10px; letter-spacing:-.01em; font-weight:600; }
+  .feature-head p{ margin:0; color:var(--ink-soft); max-width:540px; font-size:14.5px;}
+  .badge-row{ display:flex; flex-wrap:wrap; gap:0; margin:16px 0 0; font-size:12.5px; color:var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;}
+  .chip{ padding:0 10px 0 0; margin:0 10px 6px 0; border-right:1px solid var(--border); }
+  .chip:last-child{ border-right:none; }
+  .links-row{ display:flex; gap:20px; flex-wrap:wrap; }
 
-  .stat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:14px; overflow:hidden; margin:26px 0; }
-  .stat{ background:var(--bg-alt); padding:18px 16px; text-align:left; }
-  .stat b{ display:block; font-size:22px; letter-spacing:-.02em; } .stat span{ font-size:12.5px; color:var(--muted); }
+  .stat-row{ display:flex; flex-wrap:wrap; gap:0; margin:24px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+  .stat{ flex:1; min-width:130px; padding:14px 18px 14px 0; border-right:1px solid var(--border); }
+  .stat:last-child{ border-right:none; }
+  .stat b{ display:block; font-size:22px; font-family:"Fraunces", Georgia, serif; font-weight:600; letter-spacing:-.01em; }
+  .stat span{ font-size:12px; color:var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 
-  .tour{ margin-top:30px; }
-  .tour h4{ font-weight:700; letter-spacing:.01em; text-transform:uppercase; font-size:12.5px; color:var(--ink-soft); margin:0 0 14px;}
+  .tour{ margin-top:28px; }
+  .tour h4{ font-weight:600; letter-spacing:.06em; text-transform:uppercase; font-size:11.5px; color:var(--muted); margin:0 0 14px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;}
 
   /* clickable module cards */
-  .modgrid{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  .modgrid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); }
   .modcard{
-    border:1px solid var(--border); border-radius:12px; overflow:hidden; background:var(--bg);
+    border:none; overflow:hidden; background:var(--bg-alt);
     cursor:pointer; text-align:left; padding:0; font-family:inherit; color:var(--ink);
-    transition:transform .15s ease, border-color .15s ease;
+    transition:opacity .15s ease;
   }
-  .modcard:hover{ transform:translateY(-2px); border-color:var(--accent); }
-  .modcard img{ width:100%; height:110px; object-fit:cover; object-position:top; }
-  .modcard .mc-body{ padding:11px 13px; }
-  .modcard b{ display:block; font-size:13.5px; margin-bottom:3px; }
-  .modcard span{ font-size:11.5px; color:var(--muted); }
+  .modcard:hover{ opacity:.82; }
+  .modcard img{ width:100%; height:108px; object-fit:cover; object-position:top; filter:grayscale(.15); }
+  .modcard .mc-body{ padding:10px 12px; border-top:1px solid var(--border); }
+  .modcard b{ display:block; font-size:13px; margin-bottom:2px; font-weight:600; }
+  .modcard span{ font-size:11px; color:var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 
-  .arch{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:12px; font-size:13.5px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-  .arch .node{ border:1px solid var(--border); background:var(--bg); padding:10px 14px; border-radius:10px; color:var(--ink-soft); }
+  .arch{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:12px; font-size:13px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .arch .node{ border:1px solid var(--border); background:var(--bg); padding:8px 12px; color:var(--ink-soft); }
   .arch .arrow{ color:var(--muted); }
 
-  .grid3{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
-  .pcard{
-    border:1px solid var(--border); border-radius:14px; padding:18px; background:var(--bg-alt);
-    text-decoration:none; color:var(--ink); transition:transform .15s ease, border-color .15s ease; display:block;
-  }
-  .pcard:hover{ transform:translateY(-2px); border-color:var(--accent); }
-  .pcard b{ display:block; font-size:14.5px; margin-bottom:6px; }
-  .pcard p{ margin:0 0 8px; font-size:13px; color:var(--ink-soft); line-height:1.5; }
-  .pcard span{ font-size:12px; color:var(--muted); }
+  /* Other projects: a plain numbered list, not a card grid */
+  .plist{ border-top:1px solid var(--border); }
+  .prow{ display:grid; grid-template-columns:44px 1.3fr 1fr; gap:18px; padding:18px 0; border-bottom:1px solid var(--border); align-items:baseline; }
+  .prow .pn{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:12px; color:var(--muted); }
+  .prow b{ display:block; font-size:15px; font-weight:600; margin-bottom:4px; font-family:"Fraunces", Georgia, serif; }
+  .prow p{ margin:0; font-size:13.5px; color:var(--ink-soft); line-height:1.5; }
+  .prow span{ font-size:11.5px; color:var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 
   .about-grid{ display:grid; grid-template-columns:1.2fr 1fr; gap:40px; align-items:start; }
   .skill-group{ margin-bottom:16px; }
-  .skill-group h5{ font-size:12.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:0 0 10px; }
-  .skill-chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .skill-group h5{ font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin:0 0 8px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight:600;}
+  .skill-chips{ display:flex; flex-wrap:wrap; font-size:13px; color:var(--ink-soft); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .skill-chips span{ margin:0 10px 6px 0; padding-right:10px; border-right:1px solid var(--border); }
+  .skill-chips span:last-child{ border-right:none; }
 
-  .xp{ margin-bottom:26px; }
+  .xp{ margin-bottom:26px; padding-bottom:22px; border-bottom:1px solid var(--border); }
+  .xp:last-of-type{ border-bottom:none; }
   .xp-head{ display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:8px; }
-  .xp-head b{ font-size:15.5px; } .xp-head span{ font-size:13px; color:var(--muted); }
+  .xp-head b{ font-size:16px; font-family:"Fraunces", Georgia, serif; font-weight:600; }
+  .xp-head span{ font-size:12.5px; color:var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
   .xp ul{ margin:8px 0 0; padding-left:18px; color:var(--ink-soft); font-size:14px; }
   .xp li{ margin-bottom:6px; }
-  .edu{ margin-top:8px; font-size:14.5px; color:var(--ink-soft); }
+  .edu{ margin-top:8px; font-size:14px; color:var(--ink-soft); }
+  .edu b{ font-family:"Fraunces", Georgia, serif; }
 
-  .contact-card{ background:var(--bg-alt); border:1px solid var(--border); border-radius:20px; padding:40px; text-align:center; box-shadow:var(--shadow); }
-  .contact-card h2{ margin-top:0; }
-  .contact-links{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:22px; }
-  .contact-meta{ margin-top:14px; font-size:13.5px; color:var(--muted); }
+  .contact-block{ border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:36px 0; }
+  .contact-links{ display:flex; gap:28px; flex-wrap:wrap; margin-top:18px; font-size:15px; }
+  .contact-meta{ margin-top:16px; font-size:13px; color:var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 
-  footer{ text-align:center; padding:36px 0 8px; color:var(--muted); font-size:13px; }
+  footer{ text-align:center; padding:32px 0 8px; color:var(--muted); font-size:12.5px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 
-  #lightbox{ position:fixed; inset:0; background:rgba(6,8,14,.86); display:none; align-items:center; justify-content:center; z-index:110; padding:24px; }
+  #lightbox{ position:fixed; inset:0; background:rgba(10,8,6,.9); display:none; align-items:center; justify-content:center; z-index:110; padding:24px; }
   #lightbox.open{ display:flex; }
-  #lightbox img{ max-width:min(1200px,92vw); max-height:88vh; border-radius:10px; box-shadow:0 30px 80px rgba(0,0,0,.5); }
+  #lightbox img{ max-width:min(1200px,92vw); max-height:88vh; box-shadow:0 30px 80px rgba(0,0,0,.5); }
   #lightbox .close{ position:absolute; top:22px; right:28px; color:#fff; font-size:28px; cursor:pointer; opacity:.8; }
 
   #modal-overlay{
-    position:fixed; inset:0; background:rgba(6,8,14,.7); display:none; align-items:flex-start; justify-content:center;
+    position:fixed; inset:0; background:rgba(10,8,6,.75); display:none; align-items:flex-start; justify-content:center;
     z-index:100; padding:40px 20px; overflow-y:auto;
   }
   #modal-overlay.open{ display:flex; }
   .modal{
-    background:var(--bg-alt); border:1px solid var(--border); border-radius:18px; max-width:820px; width:100%;
-    padding:32px; position:relative; box-shadow:0 40px 100px rgba(0,0,0,.4);
+    background:var(--bg-alt); border:1px solid var(--border); border-radius:3px; max-width:820px; width:100%;
+    padding:32px; position:relative;
   }
   .modal .m-close{
-    position:absolute; top:20px; right:20px; background:var(--chip-bg); border:none; width:32px; height:32px; border-radius:50%;
-    font-size:18px; cursor:pointer; color:var(--ink-soft); line-height:1;
+    position:absolute; top:20px; right:20px; background:none; border:1px solid var(--border); width:30px; height:30px;
+    font-size:16px; cursor:pointer; color:var(--ink-soft); line-height:1;
   }
-  .modal h3{ font-size:22px; margin:0 0 8px; letter-spacing:-.02em; padding-right:40px; }
-  .modal p.m-blurb{ color:var(--ink-soft); font-size:15px; margin:0 0 18px; }
-  .modal ul.m-features{ margin:0 0 22px; padding-left:20px; font-size:14px; color:var(--ink-soft); }
+  .modal h3{ font-size:21px; margin:0 0 8px; letter-spacing:-.01em; padding-right:40px; font-weight:600; }
+  .modal p.m-blurb{ color:var(--ink-soft); font-size:14.5px; margin:0 0 18px; }
+  .modal ul.m-features{ margin:0 0 22px; padding-left:18px; font-size:13.5px; color:var(--ink-soft); }
   .modal ul.m-features li{ margin-bottom:7px; }
-  .m-shots{ display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px; }
-  .m-shots .shot{ border:1px solid var(--border); border-radius:10px; overflow:hidden; cursor:zoom-in; background:var(--bg); }
-  .m-shots .shot img{ width:100%; height:100px; object-fit:cover; object-position:top; }
-  .m-shots .shot .cap{ font-size:10.5px; font-weight:600; color:var(--muted); padding:6px 8px; border-top:1px solid var(--border); }
+  .m-shots{ display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:1px; background:var(--border); border:1px solid var(--border); }
+  .m-shots .shot{ overflow:hidden; cursor:zoom-in; background:var(--bg-alt); }
+  .m-shots .shot img{ width:100%; height:100px; object-fit:cover; object-position:top; filter:grayscale(.15); }
+  .m-shots .shot .cap{ font-size:10px; font-weight:600; color:var(--muted); padding:6px 8px; border-top:1px solid var(--border); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 
   @media (max-width: 760px){
-    .stat-grid{ grid-template-columns:repeat(2,1fr); }
+    .hero-grid{ grid-template-columns:1fr; }
+    .hero-meta{ border-left:none; padding-left:0; border-top:1px solid var(--border); padding-top:20px; }
     .modgrid{ grid-template-columns:repeat(2,1fr); }
-    .grid3{ grid-template-columns:1fr; }
+    .prow{ grid-template-columns:1fr; gap:4px; }
     .about-grid{ grid-template-columns:1fr; }
     nav.links{ gap:14px; }
     .feature-card{ padding:20px; }
@@ -179,11 +199,11 @@
 
 <header class="nav">
   <div class="nav-inner">
-    <a class="brand" href="#top"><span class="dot"></span> Shahil Kumar Chourasia</a>
+    <a class="brand" href="#top">Shahil Kumar Chourasia</a>
     <nav class="links">
-      <a href="#work">Work</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
+      <a href="#work"><span class="n">01</span>Work</a>
+      <a href="#about"><span class="n">02</span>About</a>
+      <a href="#contact"><span class="n">03</span>Contact</a>
     </nav>
   </div>
 </header>
@@ -191,27 +211,40 @@
 <div class="wrap" id="top">
 
   <section class="hero">
-    <div class="kicker">Open to backend / full-stack roles</div>
-    <h1 class="title">Backend-focused developer.<br><span>~2 years building production SaaS platforms.</span></h1>
-    <p class="lede">
-      I design and ship complete features — Postgres/MySQL schemas, JWT-secured REST APIs, and the React UI on top —
-      for multi-tenant SaaS products. Currently building <b>Flowdesk</b>, an HR platform running real payroll,
-      attendance, and project tracking for live organisations.
-    </p>
-    <div class="cta-row">
-      <a class="btn primary" href="#work">View my work</a>
-      <a class="btn" href="https://github.com/Shahil-1999" target="_blank" rel="noopener">GitHub ↗</a>
-      <a class="btn" href="mailto:shahilchourasia30@gmail.com">Email me</a>
+    <div class="hero-grid">
+      <div>
+        <p class="idx">Backend Developer — Kolkata, IN</p>
+        <h1 class="title">Shahil Kumar<br>Chourasia</h1>
+        <p class="role">~2 years building production SaaS platforms.</p>
+        <p class="lede">
+          I design and ship complete features — Postgres/MySQL schemas, JWT-secured REST APIs, and the React UI on top —
+          for multi-tenant products. Currently building <b>Flowdesk</b>, an HR platform running real payroll,
+          attendance, and project tracking for live organisations.
+        </p>
+        <div class="cta-row">
+          <a class="btn primary" href="#work">View my work</a>
+          <a class="btn" href="https://github.com/Shahil-1999" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn" href="mailto:shahilchourasia30@gmail.com">Email</a>
+        </div>
+      </div>
+      <div class="hero-meta">
+        <dl style="margin:0;">
+          <div><dt>Focus</dt><dd>Node.js · Postgres · React</dd></div>
+          <div><dt>Currently</dt><dd>Software Developer, Ingreens</dd></div>
+          <div><dt>Previously</dt><dd>Codelogicx — built TeamTrace</dd></div>
+          <div><dt>Status</dt><dd>Open to roles &amp; freelance</dd></div>
+        </dl>
+      </div>
     </div>
   </section>
 
   <section id="work">
-    <p class="eyebrow">Featured work</p>
-    <h2 class="h2">What I've built</h2>
+    <div class="sec-head"><span class="idx">01</span><h2 class="h2">What I've built</h2></div>
     <p class="sub">Built end to end — data model through deployed UI.</p>
 
     <!-- FLOWDESK -->
     <div class="feature-card">
+      <p class="feature-tag">Case study — 01</p>
       <div class="feature-head">
         <div>
           <h3>Flowdesk — Multi-tenant HRMS</h3>
@@ -224,11 +257,11 @@
           </div>
         </div>
         <div class="links-row">
-          <a class="btn primary" href="https://flowdesk-hrms-frontend.onrender.com" target="_blank" rel="noopener">Live demo ↗</a>
+          <a class="btn primary" href="https://flowdesk-hrms-frontend.onrender.com" target="_blank" rel="noopener">Live demo</a>
         </div>
       </div>
 
-      <div class="stat-grid">
+      <div class="stat-row">
         <div class="stat"><b>~67.5k</b><span>lines of frontend code</span></div>
         <div class="stat"><b>97</b><span>page components</span></div>
         <div class="stat"><b>12+</b><span>HR &amp; PM modules</span></div>
@@ -257,6 +290,7 @@
 
     <!-- PAYMENT VERIFICATION CONSOLE -->
     <div class="feature-card">
+      <p class="feature-tag">Case study — 02</p>
       <div class="feature-head">
         <div>
           <h3>Payment Verification Console</h3>
@@ -274,20 +308,20 @@
       <div class="tour">
         <h4>What it does</h4>
         <div class="modgrid" style="grid-template-columns:repeat(2,1fr);">
-          <div class="mod" style="border:1px solid var(--border);border-radius:12px;padding:16px 18px;background:var(--bg);">
-            <b style="display:block;font-size:14.5px;margin-bottom:5px;">Platform-wide queue</b>
+          <div class="mod" style="border:1px solid var(--border);padding:16px 18px;background:var(--bg);">
+            <b style="display:block;font-size:14px;margin-bottom:5px;font-family:'Fraunces',Georgia,serif;">Platform-wide queue</b>
             <p style="margin:0;font-size:13px;color:var(--muted);line-height:1.5;">Awaiting review / Verified / Rejected / Not paid yet / All — every organisation's payments in one place, not scoped to one tenant.</p>
           </div>
-          <div class="mod" style="border:1px solid var(--border);border-radius:12px;padding:16px 18px;background:var(--bg);">
-            <b style="display:block;font-size:14.5px;margin-bottom:5px;">Verify or reject</b>
+          <div class="mod" style="border:1px solid var(--border);padding:16px 18px;background:var(--bg);">
+            <b style="display:block;font-size:14px;margin-bottom:5px;font-family:'Fraunces',Georgia,serif;">Verify or reject</b>
             <p style="margin:0;font-size:13px;color:var(--muted);line-height:1.5;">One click to verify against the UTR and screenshot proof; rejecting requires a reason, shown back to the organisation.</p>
           </div>
-          <div class="mod" style="border:1px solid var(--border);border-radius:12px;padding:16px 18px;background:var(--bg);">
-            <b style="display:block;font-size:14.5px;margin-bottom:5px;">Invoice on demand</b>
+          <div class="mod" style="border:1px solid var(--border);padding:16px 18px;background:var(--bg);">
+            <b style="display:block;font-size:14px;margin-bottom:5px;font-family:'Fraunces',Georgia,serif;">Invoice on demand</b>
             <p style="margin:0;font-size:13px;color:var(--muted);line-height:1.5;">Pulls the matching invoice for any payment — verified, rejected, or still pending — straight from the same billing data Flowdesk generates.</p>
           </div>
-          <div class="mod" style="border:1px solid var(--border);border-radius:12px;padding:16px 18px;background:var(--bg);">
-            <b style="display:block;font-size:14.5px;margin-bottom:5px;">Shared auth, separate app</b>
+          <div class="mod" style="border:1px solid var(--border);padding:16px 18px;background:var(--bg);">
+            <b style="display:block;font-size:14px;margin-bottom:5px;font-family:'Fraunces',Georgia,serif;">Shared auth, separate app</b>
             <p style="margin:0;font-size:13px;color:var(--muted);line-height:1.5;">Logs in against Flowdesk's own auth endpoint, then refuses anyone whose role isn't SUPER_ADMIN — a deliberately small, separate deployable.</p>
           </div>
         </div>
@@ -300,6 +334,7 @@
 
     <!-- POST FEED -->
     <div class="feature-card">
+      <p class="feature-tag">Case study — 03</p>
       <div class="feature-head">
         <div>
           <h3>Post Feed — Social Platform</h3>
@@ -317,20 +352,20 @@
       <div class="tour">
         <h4>What it does</h4>
         <div class="modgrid" style="grid-template-columns:repeat(2,1fr);">
-          <div class="mod" style="border:1px solid var(--border);border-radius:12px;padding:16px 18px;background:var(--bg);">
-            <b style="display:block;font-size:14.5px;margin-bottom:5px;">Accounts &amp; sessions</b>
+          <div class="mod" style="border:1px solid var(--border);padding:16px 18px;background:var(--bg);">
+            <b style="display:block;font-size:14px;margin-bottom:5px;font-family:'Fraunces',Georgia,serif;">Accounts &amp; sessions</b>
             <p style="margin:0;font-size:13px;color:var(--muted);line-height:1.5;">JWT access tokens allowlisted in Redis (instant revocation) plus rotating refresh tokens stored per-device, so a stolen refresh token can be revoked without logging everyone out.</p>
           </div>
-          <div class="mod" style="border:1px solid var(--border);border-radius:12px;padding:16px 18px;background:var(--bg);">
-            <b style="display:block;font-size:14.5px;margin-bottom:5px;">Posts &amp; comments</b>
+          <div class="mod" style="border:1px solid var(--border);padding:16px 18px;background:var(--bg);">
+            <b style="display:block;font-size:14px;margin-bottom:5px;font-family:'Fraunces',Georgia,serif;">Posts &amp; comments</b>
             <p style="margin:0;font-size:13px;color:var(--muted);line-height:1.5;">Create posts, comment threads underneath them — the core feed data model (post-model, comment-model).</p>
           </div>
-          <div class="mod" style="border:1px solid var(--border);border-radius:12px;padding:16px 18px;background:var(--bg);">
-            <b style="display:block;font-size:14.5px;margin-bottom:5px;">Profile images on S3</b>
+          <div class="mod" style="border:1px solid var(--border);padding:16px 18px;background:var(--bg);">
+            <b style="display:block;font-size:14px;margin-bottom:5px;font-family:'Fraunces',Georgia,serif;">Profile images on S3</b>
             <p style="margin:0;font-size:13px;color:var(--muted);line-height:1.5;">One profile image per user; re-uploading overwrites the previous S3 object and updates the DB record instead of leaking orphaned files.</p>
           </div>
-          <div class="mod" style="border:1px solid var(--border);border-radius:12px;padding:16px 18px;background:var(--bg);">
-            <b style="display:block;font-size:14.5px;margin-bottom:5px;">Subscriptions</b>
+          <div class="mod" style="border:1px solid var(--border);padding:16px 18px;background:var(--bg);">
+            <b style="display:block;font-size:14px;margin-bottom:5px;font-family:'Fraunces',Georgia,serif;">Subscriptions</b>
             <p style="margin:0;font-size:13px;color:var(--muted);line-height:1.5;">A subscription model behind the feed, for gating premium behaviour.</p>
           </div>
         </div>
@@ -358,46 +393,44 @@
   </section>
 
   <section id="other-work">
-    <p class="eyebrow">More work</p>
-    <h2 class="h2">Other projects</h2>
+    <div class="sec-head"><span class="idx">—</span><h2 class="h2">Other projects</h2></div>
     <p class="sub">Smaller builds — assessments, a game backend, and a few CRUD APIs.</p>
-    <div class="grid3">
-      <div class="pcard">
-        <b>Multi-School ERP Backend</b>
-        <p>Express + MySQL backend for a multi-school system: superadmin/school-admin/user roles, per-school RBAC on student records.</p>
+    <div class="plist">
+      <div class="prow">
+        <span class="pn">01</span>
+        <div><b>Multi-School ERP Backend</b><p>Express + MySQL backend for a multi-school system: superadmin/school-admin/user roles, per-school RBAC on student records.</p></div>
         <span>Node.js · Express · Sequelize</span>
       </div>
-      <div class="pcard">
-        <b>Multiplayer Wave-Shooting Game</b>
-        <p>Real-time backend for a top-down wave shooter — broadcasts live game state to many concurrent players over sockets.</p>
+      <div class="prow">
+        <span class="pn">02</span>
+        <div><b>Multiplayer Wave-Shooting Game</b><p>Real-time backend for a top-down wave shooter — broadcasts live game state to many concurrent players over sockets.</p></div>
         <span>Node.js · Socket.io</span>
       </div>
-      <div class="pcard">
-        <b>Book Management API</b>
-        <p>RESTful CRUD API for managing a book catalog.</p>
+      <div class="prow">
+        <span class="pn">03</span>
+        <div><b>Book Management API</b><p>RESTful CRUD API for managing a book catalog.</p></div>
         <span>Node.js · Express · Sequelize · MySQL</span>
       </div>
-      <div class="pcard">
-        <b>Food Delivery Website</b>
-        <p>Static front-end for a food-ordering site — layout and UI, no backend.</p>
+      <div class="prow">
+        <span class="pn">04</span>
+        <div><b>Food Delivery Website</b><p>Static front-end for a food-ordering site — layout and UI, no backend.</p></div>
         <span>HTML · CSS</span>
       </div>
-      <div class="pcard">
-        <b>Employee Management API</b>
-        <p>CRUD employee-records backend, built for a technical assessment.</p>
+      <div class="prow">
+        <span class="pn">05</span>
+        <div><b>Employee Management API</b><p>CRUD employee-records backend, built for a technical assessment.</p></div>
         <span>Node.js · MySQL</span>
       </div>
-      <div class="pcard">
-        <b>Account Management API</b>
-        <p>Account-records backend, built for a technical assessment.</p>
+      <div class="prow">
+        <span class="pn">06</span>
+        <div><b>Account Management API</b><p>Account-records backend, built for a technical assessment.</p></div>
         <span>Node.js</span>
       </div>
     </div>
   </section>
 
   <section id="about">
-    <p class="eyebrow">About</p>
-    <h2 class="h2">Experience</h2>
+    <div class="sec-head"><span class="idx">02</span><h2 class="h2">Experience</h2></div>
 
     <div class="xp">
       <div class="xp-head"><b>Software Developer — Ingreens</b><span>May 2026 – Present · Kolkata, India</span></div>
@@ -422,45 +455,44 @@
 
     <div class="about-grid">
       <div>
-        <p class="sub" style="font-size:15.5px;margin-bottom:0;">
+        <p class="sub" style="font-size:15px;margin-bottom:0;max-width:none;">
           I like owning things end to end — schema design, API contracts, the UI on top, and the pipeline that
           ships it. Flowdesk grew from a single HR tool into a multi-tenant SaaS product with its own billing,
           because that's the kind of problem I like: real workflows, real data, real constraints.
         </p>
         <div class="edu">
-          <b>Education</b><br>
-          Master of Computer Application (MCA) — Gurunanak Institute of Technology, Kolkata<br>
+          <b>Education</b> — Master of Computer Application (MCA)<br>
+          Gurunanak Institute of Technology, Kolkata<br>
           Aug 2021 – Jul 2023 · GPA 8.72
         </div>
       </div>
       <div>
         <div class="skill-group"><h5>Backend</h5><div class="skill-chips">
-          <span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">Hapi.js</span><span class="chip">Sequelize</span>
+          <span>Node.js</span><span>Express</span><span>Hapi.js</span><span>Sequelize</span>
         </div></div>
         <div class="skill-group"><h5>Data &amp; caching</h5><div class="skill-chips">
-          <span class="chip">PostgreSQL</span><span class="chip">MySQL</span><span class="chip">Redis</span>
+          <span>PostgreSQL</span><span>MySQL</span><span>Redis</span>
         </div></div>
         <div class="skill-group"><h5>Auth &amp; API</h5><div class="skill-chips">
-          <span class="chip">JWT</span><span class="chip">RBAC</span><span class="chip">Joi</span><span class="chip">REST</span><span class="chip">Swagger</span>
+          <span>JWT</span><span>RBAC</span><span>Joi</span><span>REST</span><span>Swagger</span>
         </div></div>
         <div class="skill-group"><h5>Frontend</h5><div class="skill-chips">
-          <span class="chip">React</span><span class="chip">Vite</span><span class="chip">Tailwind CSS</span>
+          <span>React</span><span>Vite</span><span>Tailwind CSS</span>
         </div></div>
         <div class="skill-group"><h5>Cloud &amp; tools</h5><div class="skill-chips">
-          <span class="chip">AWS S3</span><span class="chip">Render</span><span class="chip">Git</span><span class="chip">Postman</span><span class="chip">JIRA</span>
+          <span>AWS S3</span><span>Render</span><span>Git</span><span>Postman</span><span>JIRA</span>
         </div></div>
       </div>
     </div>
   </section>
 
   <section id="contact">
-    <div class="contact-card">
-      <p class="eyebrow" style="justify-content:center;display:flex;">Get in touch</p>
-      <h2 class="h2">Let's build something.</h2>
-      <p class="sub" style="margin:0 auto;">Open to backend / full-stack roles and freelance work.</p>
+    <div class="sec-head"><span class="idx">03</span><h2 class="h2">Get in touch</h2></div>
+    <div class="contact-block">
+      <p class="sub" style="margin-bottom:0;max-width:none;">Open to backend / full-stack roles and freelance work.</p>
       <div class="contact-links">
         <a class="btn primary" href="mailto:shahilchourasia30@gmail.com">shahilchourasia30@gmail.com</a>
-        <a class="btn" href="https://github.com/Shahil-1999" target="_blank" rel="noopener">GitHub ↗</a>
+        <a class="btn" href="https://github.com/Shahil-1999" target="_blank" rel="noopener">GitHub</a>
       </div>
       <p class="contact-meta">Kolkata, West Bengal, India · +91 84201 79104</p>
     </div>
@@ -468,7 +500,7 @@
 
 </div>
 
-<footer>© <span id="yr"></span> Shahil Kumar Chourasia. Built with plain HTML/CSS, deployed on GitHub Pages.</footer>
+<footer>© <span id="yr"></span> Shahil Kumar Chourasia — built by hand, deployed on GitHub Pages.</footer>
 
 <div id="modal-overlay"><div class="modal" id="modal-content"></div></div>
 <div id="lightbox"><span class="close">&times;</span><img id="lightbox-img" src="" alt=""></div>
