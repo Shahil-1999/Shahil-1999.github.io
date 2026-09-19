@@ -406,6 +406,7 @@
         <li>Designed secure REST APIs for Employee, Payroll, Attendance, Leave, Organisation, Auth &amp; Subscription modules.</li>
         <li>Built the payroll engine: CTC configuration, salary structure, PF/ESI/PTax, EPF/EPS, arrears, LOP, statutory reports.</li>
         <li>Attendance &amp; Leave: bulk CSV import, regularisation workflow, leave balances and approvals.</li>
+        <li>Built a Performance Management module: designation-based KRA/KPI templates, a weighted self-rating → manager-review appraisal cycle, and a reporting dashboard with charts and Excel export.</li>
         <li>Subscription &amp; billing: module mapping, add-ons, billing cycles, per-organisation lifecycle.</li>
       </ul>
     </div>
@@ -517,6 +518,22 @@
         "Payslip archive per employee, with PDF export"
       ],
       shots:[{src:"assets/shots/payroll.png", cap:"Payroll hub"}]
+    },
+    { id:"performance", title:"Performance Management", thumb:"assets/shots/performance-kra-templates.png",
+      blurb:"KRA/KPI appraisal cycles: HR defines weighted templates per designation, employees self-rate, managers finalise, and a reporting dashboard rolls it all up.",
+      features:[
+        "Designation-based KRA/KPI templates, each weighted to 100%",
+        "Appraisal cycles — activating one clones every eligible employee's template into their own scorecard",
+        "Employee self-rating (1–5 per KPI) followed by reporting-manager review and a weighted overall score",
+        "Org-wide report: status breakdown, rating distribution, and per-KRA self-vs-manager averages, with an Excel export",
+        "Downloadable PDF appraisal summary per employee"
+      ],
+      shots:[
+        {src:"assets/shots/performance-kra-templates.png", cap:"KRA / KPI templates"},
+        {src:"assets/shots/performance-cycles.png", cap:"Appraisal cycles"},
+        {src:"assets/shots/performance-team-reviews.png", cap:"Manager review queue"},
+        {src:"assets/shots/performance-report.png", cap:"Appraisal report & charts"}
+      ]
     },
     { id:"projects", title:"Projects", thumb:"assets/shots/project-dashboard.png",
       blurb:"A full agile tool per project — Scrum or Kanban, sprints, a live dashboard, nested docs, and 9 built-in reports.",
