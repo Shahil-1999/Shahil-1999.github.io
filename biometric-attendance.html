@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Biometric Attendance in Flowdesk — Shahil Kumar Chourasia</title>
+<meta name="description" content="How Flowdesk connects biometric machines and cloud services to attendance: setup steps with screenshots, what to provide, and how the backend works." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230f172a'/%3E%3Ctext x='50' y='68' font-size='58' font-family='system-ui,sans-serif' font-weight='700' fill='%2338bdf8' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E" />
+<style>
+  :root{
+    --bg:#f7f8fb; --bg-alt:#ffffff; --ink:#12141c; --ink-soft:#4a5063; --muted:#6b7180;
+    --border:#e4e6ee; --accent:#2563eb; --accent-soft:#eaf0ff; --chip-bg:#eef0f6;
+    --ok:#1f7a4d; --ok-soft:#e3f3ea; --warn:#8a5a00; --warn-soft:#fbf0dc; --bad:#a3262e; --bad-soft:#fbe6e7;
+    --shadow: 0 1px 2px rgba(20,24,40,.04), 0 8px 24px -12px rgba(20,24,40,.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0b0d14; --bg-alt:#12141d; --ink:#eef0f6; --ink-soft:#c3c7d6; --muted:#8b91a3;
+      --border:#232635; --accent:#5b9dff; --accent-soft:#16223f; --chip-bg:#1a1d2b;
+      --ok:#5fd09a; --ok-soft:#10301f; --warn:#f0b868; --warn-soft:#38290f; --bad:#ff8d94; --bad-soft:#40191c;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px -12px rgba(0,0,0,.55);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0b0d14; --bg-alt:#12141d; --ink:#eef0f6; --ink-soft:#c3c7d6; --muted:#8b91a3;
+    --border:#232635; --accent:#5b9dff; --accent-soft:#16223f; --chip-bg:#1a1d2b;
+    --ok:#5fd09a; --ok-soft:#10301f; --warn:#f0b868; --warn-soft:#38290f; --bad:#ff8d94; --bad-soft:#40191c;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px -12px rgba(0,0,0,.55);
+    color-scheme: dark;
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+    line-height:1.6; padding-bottom:40px;
+  }
+  a{ color:var(--accent); } img{ max-width:100%; display:block; }
+  .wrap{ max-width:880px; margin:0 auto; padding-inline:24px; }
+
+  header.nav{
+    position:sticky; top:0; z-index:20;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px); border-bottom:1px solid var(--border);
+  }
+  .nav-inner{ max-width:1080px; margin:0 auto; padding:14px 24px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .brand{ font-weight:700; letter-spacing:-.02em; font-size:15px; text-decoration:none; color:var(--ink); display:flex; gap:8px; align-items:center; }
+  .brand .dot{ width:9px; height:9px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+  .back{ font-size:14px; color:var(--ink-soft); text-decoration:none; }
+  .back:hover{ color:var(--ink); }
+
+  .hero{ padding:64px 0 28px; }
+  .kicker{ display:inline-flex; font-size:12.5px; font-weight:600; letter-spacing:.02em; color:var(--accent); background:var(--accent-soft); padding:6px 12px; border-radius:999px; margin-bottom:18px; }
+  h1{ font-size:clamp(30px,5vw,44px); line-height:1.1; letter-spacing:-.03em; margin:0 0 16px; font-weight:700; text-wrap:balance; }
+  p.lede{ font-size:18px; color:var(--ink-soft); max-width:660px; margin:0; }
+
+  .stat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:30px 0 8px; }
+  .stat{ background:var(--bg-alt); border:1px solid var(--border); border-radius:12px; padding:14px 16px; }
+  .stat b{ display:block; font-size:22px; letter-spacing:-.02em; }
+  .stat span{ font-size:12.5px; color:var(--muted); }
+
+  section{ padding-top:46px; }
+  h2{ font-size:26px; letter-spacing:-.02em; margin:0 0 10px; }
+  h3{ font-size:17px; margin:26px 0 8px; letter-spacing:-.01em; }
+  p{ margin:0 0 12px; color:var(--ink-soft); }
+  ul,ol{ margin:0 0 14px; padding-left:22px; color:var(--ink-soft); } li{ margin:5px 0; }
+  code{ font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.88em; background:var(--chip-bg); padding:1px 6px; border-radius:5px; overflow-wrap:anywhere; }
+
+  .two{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin:12px 0 8px; }
+  .card{ background:var(--bg-alt); border:1px solid var(--border); border-radius:14px; padding:18px 20px; box-shadow:var(--shadow); min-width:0; }
+  .card h3{ margin:0 0 6px; }
+  .card .tag{ font-size:11.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); margin:0 0 6px; }
+  .card ul{ margin-bottom:0; font-size:14px; }
+
+  .tw{ overflow-x:auto; margin:8px 0 18px; border:1px solid var(--border); border-radius:12px; background:var(--bg-alt); }
+  table{ border-collapse:collapse; width:100%; font-size:13.5px; }
+  th{ text-align:left; font-size:11.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); background:var(--chip-bg); padding:9px 12px; white-space:nowrap; }
+  td{ padding:9px 12px; border-top:1px solid var(--border); vertical-align:top; color:var(--ink-soft); min-width:0; }
+  td b{ color:var(--ink); }
+  td.m{ font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:12.5px; overflow-wrap:anywhere; }
+
+  .steps{ list-style:none; padding:0; margin:10px 0 0; counter-reset:step; }
+  .steps > li{ counter-increment:step; position:relative; margin:0 0 6px 16px; padding:0 0 26px 50px; border-left:1px solid var(--border); }
+  .steps > li:last-child{ border-left-color:transparent; padding-bottom:4px; }
+  .steps > li::before{ content:counter(step); position:absolute; left:-17px; top:0; width:33px; height:33px; border-radius:50%; background:var(--accent); color:#fff; display:grid; place-items:center; font-weight:700; font-size:14px; }
+  .steps h3{ margin:3px 0 6px; }
+
+  figure.shot{ margin:12px 0 4px; cursor:zoom-in; }
+  figure.shot img{ width:100%; height:auto; border:1px solid var(--border); border-radius:10px; box-shadow:var(--shadow); background:var(--bg-alt); }
+  figure.shot figcaption{ font-size:13px; color:var(--muted); margin-top:7px; }
+
+  .note, .warn, .risk{ padding:12px 14px; margin:0 0 16px; font-size:14px; border-left:3px solid; border-radius:0 8px 8px 0; color:var(--ink-soft); }
+  .note{ background:var(--accent-soft); border-color:var(--accent); }
+  .warn{ background:var(--warn-soft); border-color:var(--warn); }
+  .risk{ background:var(--bad-soft); border-color:var(--bad); }
+  .note b, .warn b, .risk b{ color:var(--ink); }
+
+  .case{ background:var(--bg-alt); border:1px solid var(--border); border-radius:12px; margin:0 0 12px; overflow:hidden; }
+  .case-head{ padding:11px 16px; background:var(--chip-bg); font-weight:700; font-size:14.5px; }
+  .case-body{ padding:12px 16px 4px; }
+  .case-row{ display:flex; gap:10px; margin-bottom:10px; }
+  .case-row .t{ font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:2px 8px; border-radius:5px; height:fit-content; white-space:nowrap; margin-top:2px; }
+  .case-row.p .t{ background:var(--bad-soft); color:var(--bad); }
+  .case-row.f .t{ background:var(--ok-soft); color:var(--ok); }
+  .case-row p{ margin:0; font-size:14.5px; }
+
+  .flow{ margin:8px 0 14px; border:1px solid var(--border); border-radius:12px; background:var(--bg-alt); }
+  .flow-step{ display:flex; gap:14px; padding:12px 16px; border-top:1px solid var(--border); }
+  .flow-step:first-child{ border-top:none; }
+  .flow-step .n{ font-weight:700; color:var(--accent); min-width:1.4em; }
+  .flow-step .w{ display:block; font-size:12.5px; color:var(--muted); margin-top:1px; }
+
+  footer{ text-align:center; padding:44px 0 8px; color:var(--muted); font-size:13px; }
+
+  #lightbox{ position:fixed; inset:0; background:rgba(6,8,14,.86); display:none; align-items:center; justify-content:center; z-index:110; padding:24px; }
+  #lightbox.open{ display:flex; }
+  #lightbox img{ max-width:min(1300px,94vw); max-height:90vh; border-radius:10px; box-shadow:0 30px 80px rgba(0,0,0,.5); }
+
+  @media (max-width: 700px){
+    .stat-grid{ grid-template-columns:repeat(2,1fr); }
+    .steps > li{ padding-left:40px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><span class="dot"></span> Shahil Kumar Chourasia</a>
+    <a class="back" href="index.html#work">&larr; Back to work</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <span class="kicker">Flowdesk &middot; Attendance module</span>
+    <h1>Biometric attendance for a multi-tenant HRMS</h1>
+    <p class="lede">Each organization connects its own biometric machines or a cloud service, and punches turn into attendance on their own. This page covers how to set it up, what to provide, and how the backend works.</p>
+    <div class="stat-grid">
+      <div class="stat"><b>2</b><span>ways to connect, chosen per device</span></div>
+      <div class="stat"><b>3</b><span>new tables: devices, punches, links</span></div>
+      <div class="stat"><b>14</b><span>admin API routes</span></div>
+      <div class="stat"><b>4</b><span>machine protocol endpoints</span></div>
+    </div>
+  </div>
+
+  <section id="ways">
+    <h2>Two ways to connect</h2>
+    <p>An organization registers devices, and each device belongs to that organization only. Flowdesk keeps every punch, matches it to an employee, and builds the employee's attendance for the day.</p>
+    <div class="two">
+      <div class="card">
+        <p class="tag">Option A</p>
+        <h3>Machine</h3>
+        <p>ZKTeco, eSSL, Realtime, Mantra and other ADMS machines send punches to Flowdesk by themselves. Nothing is installed at the office.</p>
+        <ul><li>The machine needs a Cloud Server or ADMS setting.</li><li>HR registers its serial number.</li></ul>
+      </div>
+      <div class="card">
+        <p class="tag">Option B</p>
+        <h3>Cloud service</h3>
+        <p>For machines that already report to BioTime / ZKBio Time. Flowdesk signs in and collects punches every 10 minutes.</p>
+        <ul><li>The server must be reachable from the internet.</li><li>HR gives an address and a login.</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="provide">
+    <h2>What the admin needs to provide</h2>
+    <h3>For a machine</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Detail</th><th>Where to find it</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td><b>Device name</b></td><td>Your own label, shown in the device list and punch log.</td><td>Front door machine</td></tr>
+        <tr><td><b>Make</b></td><td>Printed on the machine.</td><td>ZKTeco</td></tr>
+        <tr><td><b>Serial number</b></td><td>Sticker on the machine, or Menu, System Info, Device Info. Unique across all of Flowdesk.</td><td class="m">CJDE204860123</td></tr>
+        <tr><td><b>Branch</b> (optional)</td><td>The office the machine is in.</td><td>Pune office</td></tr>
+        <tr><td><b>Server address and port</b></td><td>Shown by Flowdesk after the device is added. Typed into the machine.</td><td class="m">api.yourcompany.com, 443</td></tr>
+        <tr><td><b>Machine IDs</b></td><td>The ID each person was enrolled with on the machine.</td><td class="m">FLO1 or 123</td></tr>
+      </tbody>
+    </table></div>
+    <h3>For a cloud service</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Detail</th><th>Where to find it</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td><b>Name</b></td><td>Your own label.</td><td>Head office cloud</td></tr>
+        <tr><td><b>Server address</b></td><td>The web address used to open BioTime, starting with https://.</td><td class="m">https://biotime.yourcompany.com</td></tr>
+        <tr><td><b>Username</b></td><td>A BioTime account that can view attendance transactions.</td><td class="m">admin</td></tr>
+        <tr><td><b>Password</b></td><td>That account's password. Stored encrypted and never shown again.</td><td>-</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note"><b>Permission.</b> The person setting this up needs the permission <b>Manage Biometric Devices</b> on their role. An address that only works on the office network, such as 192.168.x.x, is refused for cloud services.</div>
+  </section>
+
+  <section id="machine">
+    <h2>Set up a machine</h2>
+    <ol class="steps">
+      <li>
+        <h3>Open Biometric Devices</h3>
+        <p>Go to Attendance and click the Biometric Devices card.</p>
+        <figure class="shot" data-full="assets/shots/biometric-attendance-card.png"><img src="assets/shots/biometric-attendance-card.png" alt="Attendance page with the Biometric Devices card" loading="lazy"><figcaption>The card sits with the other attendance actions.</figcaption></figure>
+      </li>
+      <li>
+        <h3>Add the device</h3>
+        <p>On the Devices tab click Add device, choose Machine, then enter the name, make and serial number.</p>
+        <figure class="shot" data-full="assets/shots/biometric-devices.png"><img src="assets/shots/biometric-devices.png" alt="Devices tab listing a cloud account and a machine" loading="lazy"><figcaption>Every machine and cloud account of the organization, with live status.</figcaption></figure>
+        <figure class="shot" data-full="assets/shots/biometric-add-machine.png"><img src="assets/shots/biometric-add-machine.png" alt="Add a device drawer, Machine option" loading="lazy"><figcaption>The serial number is the important field. It must be 4 to 60 characters of letters, numbers, dots, dashes or underscores.</figcaption></figure>
+      </li>
+      <li>
+        <h3>Point the machine at Flowdesk</h3>
+        <ol>
+          <li>On the machine open Menu, Comm., Cloud Server Setting.</li>
+          <li>Turn on Enable domain name if offered.</li>
+          <li>Enter the server address and port Flowdesk shows.</li>
+          <li>If the machine has an HTTPS option and the port is 443, turn it on.</li>
+          <li>Save. It usually connects within a minute.</li>
+        </ol>
+        <figure class="shot" data-full="assets/shots/biometric-connection-details.png"><img src="assets/shots/biometric-connection-details.png" alt="Connection details with server address and port" loading="lazy"><figcaption>Open any machine with Edit and connection details to see the address again. Values shown are samples.</figcaption></figure>
+      </li>
+      <li>
+        <h3>Check that it is connected</h3>
+        <p>The device should read <b>Connected, last contact just now</b>. A machine that has not contacted Flowdesk for 15 minutes shows <b>No contact since</b>.</p>
+        <figure class="shot" data-full="assets/shots/biometric-devices-connected.png"><img src="assets/shots/biometric-devices-connected.png" alt="Machine connected and cloud account synced" loading="lazy"><figcaption>A connected machine and a synced cloud account.</figcaption></figure>
+      </li>
+    </ol>
+    <p>On its first connection the machine uploads everything stored on it. Flowdesk imports all of it, except for days that already have a regularisation request.</p>
+  </section>
+
+  <section id="cloud">
+    <h2>Set up a cloud service</h2>
+    <ol class="steps">
+      <li>
+        <h3>Add the cloud account and test it</h3>
+        <p>Click Add device, choose Cloud service, fill in the name, address, username and password, then click Test connection before saving.</p>
+        <figure class="shot" data-full="assets/shots/biometric-add-cloud.png"><img src="assets/shots/biometric-add-cloud.png" alt="Cloud service form with a successful test" loading="lazy"><figcaption>The test signs in and reports the result before anything is saved.</figcaption></figure>
+        <div class="tw"><table>
+          <thead><tr><th>Message</th><th>What to do</th></tr></thead>
+          <tbody>
+            <tr><td>Connected successfully</td><td>Click Add device.</td></tr>
+            <tr><td>The username or password was not accepted</td><td>Check the login in BioTime.</td></tr>
+            <tr><td>That address could not be found</td><td>Check the spelling of the address.</td></tr>
+            <tr><td>The server refused the connection</td><td>Check the address and that the server is running.</td></tr>
+            <tr><td>That address points to a private network</td><td>The server must be reachable from the internet.</td></tr>
+          </tbody>
+        </table></div>
+      </li>
+      <li>
+        <h3>Let it sync</h3>
+        <p>The first sync reads the last 7 days. After that it runs every 10 minutes and re-reads the previous day, so punches that machines upload late are not missed. Sync now runs it on demand.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section id="after">
+    <h2>After it is connected</h2>
+    <ol class="steps">
+      <li>
+        <h3>Look at the punch log</h3>
+        <p>Each punch shows the time in the organization's timezone, the employee, the machine ID, the device and the result. Filters cover dates, device, and punches not matched to an employee.</p>
+        <figure class="shot" data-full="assets/shots/biometric-punch-log.png"><img src="assets/shots/biometric-punch-log.png" alt="Punch log" loading="lazy"><figcaption>Each punch says whether it was used for attendance.</figcaption></figure>
+      </li>
+      <li>
+        <h3>Link machine IDs that differ from employee IDs</h3>
+        <p>IDs with no matching employee wait on the Machine IDs tab. Search for the person, pick them and click Link. Earlier punches with that ID are matched straight away and their days are rebuilt.</p>
+        <figure class="shot" data-full="assets/shots/biometric-machine-ids.png"><img src="assets/shots/biometric-machine-ids.png" alt="Machine IDs tab" loading="lazy"><figcaption>Machine ID 88 has no employee yet. IDs 123 and 777 are linked.</figcaption></figure>
+        <figure class="shot" data-full="assets/shots/biometric-link-employee.png"><img src="assets/shots/biometric-link-employee.png" alt="Searching for an employee to link" loading="lazy"><figcaption>Type a name or employee ID, pick the person, then click Link.</figcaption></figure>
+      </li>
+      <li>
+        <h3>Check the attendance</h3>
+        <p>The day shows the first punch as punch-in, the last as punch-out, the hours worked, and the source Biometric.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section id="matching">
+    <h2>How a punch is matched to an employee</h2>
+    <ol>
+      <li><b>A link made by HR</b> wins if one exists for the machine ID.</li>
+      <li>Otherwise the machine ID is compared with employee IDs, ignoring capital letters.</li>
+    </ol>
+    <div class="tw"><table>
+      <thead><tr><th>Machine sends</th><th>Link</th><th>Employee IDs</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td class="m">FLO1</td><td>none</td><td class="m">FLO1</td><td>Matched to FLO1</td></tr>
+        <tr><td class="m">flo1</td><td>none</td><td class="m">FLO1</td><td>Matched, capitals ignored</td></tr>
+        <tr><td class="m">123</td><td class="m">123 to FLO1</td><td class="m">FLO1</td><td>Matched through the link</td></tr>
+        <tr><td class="m">88</td><td>none</td><td>no employee 88</td><td>Not matched. Waits for HR.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note"><b>No guessing.</b> 1 does not match FLO1. A wrong guess would put one person's punch on another person's attendance, so unmatched punches wait for HR to link them. Nothing is lost in the meantime.</div>
+  </section>
+
+  <section id="rules">
+    <h2>How a day's attendance is built</h2>
+    <ul>
+      <li>The earliest punch of the day is the punch-in and the latest is the punch-out, cut at midnight in the organization's timezone.</li>
+      <li>One punch, or two within the same minute, counts as an arrival only. The day stays open.</li>
+      <li>8 hours or more is Authorised, less is Unauthorised.</li>
+      <li>Web or mobile punches by the same person are merged: earliest in, latest out.</li>
+      <li>A day with a regularisation request is left alone.</li>
+      <li>A day the nightly job auto-closed as "forgot to punch out" is replaced by the real punches.</li>
+      <li>The same punch sent twice is stored once.</li>
+    </ul>
+    <div class="warn"><b>Night shifts.</b> Punches are grouped by calendar day, so a shift that crosses midnight is split across two days.</div>
+  </section>
+
+  <section id="backend">
+    <h2>How the backend works</h2>
+    <p>The raw punch is the source of truth, and attendance is derived from it. A machine can resend, send late, or send before anyone has told the system who an ID belongs to, so every punch is stored first and the day is recomputed from the stored punches each time.</p>
+    <h3>The flow</h3>
+    <div class="flow">
+      <div class="flow-step"><span class="n">1</span><div>A machine posts punches, or the cloud account is polled<span class="w">Machine: <code>POST /iclock/cdata?table=ATTLOG</code>. Cloud: a job every 10 minutes, one-day windows.</span></div></div>
+      <div class="flow-step"><span class="n">2</span><div>The serial number identifies the organization<span class="w">Machines have no login. An unregistered or paused serial gets a 404 and nothing is stored.</span></div></div>
+      <div class="flow-step"><span class="n">3</span><div>Time is read in the organization's timezone and stored as UTC<span class="w">The machine sends wall-clock text with no zone.</span></div></div>
+      <div class="flow-step"><span class="n">4</span><div>Every punch is saved once<span class="w">A unique index on device, machine ID and time makes resends harmless.</span></div></div>
+      <div class="flow-step"><span class="n">5</span><div>The machine ID is matched to an employee<span class="w">An HR link first, then the employee code. No match: kept as unmatched.</span></div></div>
+      <div class="flow-step"><span class="n">6</span><div>The employee's day is rebuilt from all of that day's punches<span class="w">Hours and status reuse the existing attendance calculation. Source is Biometric.</span></div></div>
+    </div>
+
+    <h3>Data model</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Table</th><th>What it holds</th></tr></thead>
+      <tbody>
+        <tr><td class="m">biometric_devices</td><td>One row per machine or cloud account, always with an organization. Machine serials are unique across all tenants. Cloud passwords are encrypted.</td></tr>
+        <tr><td class="m">biometric_punches</td><td>Every punch as received, with the matched employee or null, and a note on how it was used.</td></tr>
+        <tr><td class="m">biometric_user_maps</td><td>HR's links from a machine ID to an employee, unique per organization.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Security</h3>
+    <ul>
+      <li><b>Tenant isolation:</b> every admin query filters by the organization in the token. Editing or deleting another organization's device returns 404.</li>
+      <li><b>Server-side request forgery:</b> a tenant supplies the cloud address and the server calls it, so private, loopback and link-local addresses are refused after resolving the hostname.</li>
+      <li><b>Secrets:</b> cloud passwords are encrypted at rest and never returned by any endpoint.</li>
+      <li><b>Known gap:</b> the machine protocol has no login. Only registered, active serials are accepted. Keep serials private and serve the API over HTTPS.</li>
+    </ul>
+
+    <h3>Four bugs found by using it</h3>
+    <div class="case">
+      <div class="case-head">Employees with no status vanished from the picker and the counts</div>
+      <div class="case-body">
+        <div class="case-row p"><span class="t">Problem</span><p>The filter <code>emp_status &lt;&gt; 'separate'</code> is false for NULL, and new employees have no status. The employee dropdown was empty and headcount in the analytics read zero.</p></div>
+        <div class="case-row f"><span class="t">Fix</span><p>Nine occurrences became <code>IS DISTINCT FROM 'separate'</code>.</p></div>
+      </div>
+    </div>
+    <div class="case">
+      <div class="case-head">A dropdown clipped by the table around it</div>
+      <div class="case-body">
+        <div class="case-row p"><span class="t">Problem</span><p>The employee picker showed only a sliver of its list, because the table sits in a horizontally scrolling container that crops overflow. Screenshots taken for this page exposed it.</p></div>
+        <div class="case-row f"><span class="t">Fix</span><p>The list is positioned from the input's on-screen box with fixed positioning.</p></div>
+      </div>
+    </div>
+    <div class="case">
+      <div class="case-head">Useful errors replaced by a generic one</div>
+      <div class="case-body">
+        <div class="case-row p"><span class="t">Problem</span><p>The shared error helper replaced any 400 message longer than 50 characters with "Invalid request", hiding why a cloud address was refused.</p></div>
+        <div class="case-row f"><span class="t">Fix</span><p>A small helper shows the server's own message for client and gateway errors. The shared helper was left alone.</p></div>
+      </div>
+    </div>
+    <div class="case">
+      <div class="case-head">Machine data eaten by the form parser</div>
+      <div class="case-body">
+        <div class="case-row p"><span class="t">Problem</span><p>Machines post tab-separated text, often labelled as form data. The global form parser consumed it and no punches were read.</p></div>
+        <div class="case-row f"><span class="t">Fix</span><p>The machine router is mounted before the parsers and reads a raw text body.</p></div>
+      </div>
+    </div>
+
+    <h3>Limits</h3>
+    <p>Tested end to end with a simulated machine and a mock BioTime server, not with real hardware. The BioTime adapter follows the vendor's documented API and has not met a live server. Night shifts are split by calendar day, and status uses the existing eight-hour rule, not each person's shift.</p>
+  </section>
+
+  <footer>Shahil Kumar Chourasia &middot; Flowdesk biometric attendance &middot; screens use sample names and addresses</footer>
+</div>
+
+<div id="lightbox"><img id="lightbox-img" src="" alt=""></div>
+
+<script>
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lightbox-img');
+  document.addEventListener('click', function (e) {
+    var shot = e.target.closest('figure.shot[data-full]');
+    if (shot) {
+      lbImg.src = shot.getAttribute('data-full');
+      lb.classList.add('open');
+    } else if (e.target.closest('#lightbox')) {
+      lb.classList.remove('open');
+    }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') lb.classList.remove('open');
+  });
+</script>
+
+</body>
+</html>

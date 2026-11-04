@@ -159,6 +159,9 @@
   .modal p.m-blurb{ color:var(--ink-soft); font-size:15px; margin:0 0 18px; }
   .modal ul.m-features{ margin:0 0 22px; padding-left:20px; font-size:14px; color:var(--ink-soft); }
   .modal ul.m-features li{ margin-bottom:7px; }
+  .modal p.m-link{ margin:0 0 18px; font-size:14px; }
+  .modal p.m-link a{ color:var(--accent); font-weight:600; text-decoration:none; }
+  .modal p.m-link a:hover{ text-decoration:underline; }
   .m-shots{ display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px; }
   .m-shots .shot{ border:1px solid var(--border); border-radius:10px; overflow:hidden; cursor:zoom-in; background:var(--bg); }
   .m-shots .shot img{ width:100%; height:100px; object-fit:cover; object-position:top; }
@@ -489,14 +492,22 @@
       shots:[{src:"assets/shots/dashboard.png", cap:"Admin dashboard"}]
     },
     { id:"attendance", title:"Attendance", thumb:"assets/shots/attendance.png",
-      blurb:"Import biometric punches, catch exceptions, and let employees fix their own gaps through an approval workflow.",
+      blurb:"Punches arrive from the web, the mobile app, uploads, biometric machines and cloud services, and become one attendance record per person per day.",
       features:[
-        "Raw biometric/third-party attendance data import",
-        "Authorised vs. flagged trend, last 6 months, with all-time totals",
-        "Employee-raised regularisation requests, routed for manager approval",
-        "Full regularisation status history per employee"
+        "Biometric machines (ZKTeco, eSSL, Realtime, Mantra) push punches to the API by themselves, and BioTime cloud accounts are synced every 10 minutes",
+        "Per-organisation devices: a machine's serial number identifies its tenant, and one organisation never sees another's punches",
+        "Punch log, machine-ID to employee linking, and unmatched punches kept until HR links them",
+        "Raw attendance data import, authorised vs. flagged trend, and employee-raised regularisation with manager approval"
       ],
-      shots:[{src:"assets/shots/attendance.png", cap:"Attendance hub & analytics"}]
+      shots:[
+        {src:"assets/shots/attendance.png", cap:"Attendance hub & analytics"},
+        {src:"assets/shots/biometric-devices.png", cap:"Biometric devices"},
+        {src:"assets/shots/biometric-devices-connected.png", cap:"Machine connected, cloud synced"},
+        {src:"assets/shots/biometric-add-cloud.png", cap:"Add a cloud service"},
+        {src:"assets/shots/biometric-punch-log.png", cap:"Punch log"},
+        {src:"assets/shots/biometric-machine-ids.png", cap:"Machine IDs"}
+      ],
+      link:{ href:"biometric-attendance.html", label:"Read the full biometric attendance guide" }
     },
     { id:"leave", title:"Leave Management", thumb:"assets/shots/leave.png",
       blurb:"Configurable leave types and balances, with a manager queue for approving requests across the whole org.",
@@ -625,6 +636,7 @@
       <h3>${m.title}</h3>
       <p class="m-blurb">${m.blurb}</p>
       <ul class="m-features">${m.features.map(f=>`<li>${f}</li>`).join('')}</ul>
+      ${m.link ? `<p class="m-link"><a href="${m.link.href}">${m.link.label} &rarr;</a></p>` : ''}
       <div class="m-shots">${m.shots.map(s=>`
         <div class="shot" data-full="${s.src}"><img src="${s.src}" alt="${s.cap}"><div class="cap">${s.cap}</div></div>
       `).join('')}</div>
