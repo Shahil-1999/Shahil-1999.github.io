@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Analytics and Scheduled Reports in Flowdesk — Shahil Kumar Chourasia</title>
+<meta name="description" content="How Flowdesk's Analytics module works: seven report tabs, filters, Excel export, emailed and scheduled reports, what to set up, and how the backend is built." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230f172a'/%3E%3Ctext x='50' y='68' font-size='58' font-family='system-ui,sans-serif' font-weight='700' fill='%2338bdf8' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E" />
+<style>
+  :root{
+    --bg:#f7f8fb; --bg-alt:#ffffff; --ink:#12141c; --ink-soft:#4a5063; --muted:#6b7180;
+    --border:#e4e6ee; --accent:#2563eb; --accent-soft:#eaf0ff; --chip-bg:#eef0f6;
+    --ok:#1f7a4d; --ok-soft:#e3f3ea; --warn:#8a5a00; --warn-soft:#fbf0dc; --bad:#a3262e; --bad-soft:#fbe6e7;
+    --shadow: 0 1px 2px rgba(20,24,40,.04), 0 8px 24px -12px rgba(20,24,40,.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0b0d14; --bg-alt:#12141d; --ink:#eef0f6; --ink-soft:#c3c7d6; --muted:#8b91a3;
+      --border:#232635; --accent:#5b9dff; --accent-soft:#16223f; --chip-bg:#1a1d2b;
+      --ok:#5fd09a; --ok-soft:#10301f; --warn:#f0b868; --warn-soft:#38290f; --bad:#ff8d94; --bad-soft:#40191c;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px -12px rgba(0,0,0,.55);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0b0d14; --bg-alt:#12141d; --ink:#eef0f6; --ink-soft:#c3c7d6; --muted:#8b91a3;
+    --border:#232635; --accent:#5b9dff; --accent-soft:#16223f; --chip-bg:#1a1d2b;
+    --ok:#5fd09a; --ok-soft:#10301f; --warn:#f0b868; --warn-soft:#38290f; --bad:#ff8d94; --bad-soft:#40191c;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px -12px rgba(0,0,0,.55);
+    color-scheme: dark;
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+    line-height:1.6; padding-bottom:40px;
+  }
+  a{ color:var(--accent); } img{ max-width:100%; display:block; }
+  .wrap{ max-width:880px; margin:0 auto; padding-inline:24px; }
+
+  header.nav{
+    position:sticky; top:0; z-index:20;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px); border-bottom:1px solid var(--border);
+  }
+  .nav-inner{ max-width:1080px; margin:0 auto; padding:14px 24px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .brand{ font-weight:700; letter-spacing:-.02em; font-size:15px; text-decoration:none; color:var(--ink); display:flex; gap:8px; align-items:center; }
+  .brand .dot{ width:9px; height:9px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+  .back{ font-size:14px; color:var(--ink-soft); text-decoration:none; }
+  .back:hover{ color:var(--ink); }
+
+  .hero{ padding:64px 0 28px; }
+  .kicker{ display:inline-flex; font-size:12.5px; font-weight:600; letter-spacing:.02em; color:var(--accent); background:var(--accent-soft); padding:6px 12px; border-radius:999px; margin-bottom:18px; }
+  h1{ font-size:clamp(30px,5vw,44px); line-height:1.1; letter-spacing:-.03em; margin:0 0 16px; font-weight:700; text-wrap:balance; }
+  p.lede{ font-size:18px; color:var(--ink-soft); max-width:660px; margin:0; }
+
+  .stat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:30px 0 8px; }
+  .stat{ background:var(--bg-alt); border:1px solid var(--border); border-radius:12px; padding:14px 16px; }
+  .stat b{ display:block; font-size:22px; letter-spacing:-.02em; }
+  .stat span{ font-size:12.5px; color:var(--muted); }
+
+  section{ padding-top:46px; }
+  h2{ font-size:26px; letter-spacing:-.02em; margin:0 0 10px; }
+  h3{ font-size:17px; margin:26px 0 8px; letter-spacing:-.01em; }
+  p{ margin:0 0 12px; color:var(--ink-soft); }
+  ul,ol{ margin:0 0 14px; padding-left:22px; color:var(--ink-soft); } li{ margin:5px 0; }
+  code{ font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.88em; background:var(--chip-bg); padding:1px 6px; border-radius:5px; overflow-wrap:anywhere; }
+
+  .tw{ overflow-x:auto; margin:8px 0 18px; border:1px solid var(--border); border-radius:12px; background:var(--bg-alt); }
+  table{ border-collapse:collapse; width:100%; font-size:13.5px; }
+  th{ text-align:left; font-size:11.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); background:var(--chip-bg); padding:9px 12px; white-space:nowrap; }
+  td{ padding:9px 12px; border-top:1px solid var(--border); vertical-align:top; color:var(--ink-soft); min-width:0; }
+  td b{ color:var(--ink); }
+  td.m{ font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:12.5px; overflow-wrap:anywhere; }
+
+  .steps{ list-style:none; padding:0; margin:10px 0 0; counter-reset:step; }
+  .steps > li{ counter-increment:step; position:relative; margin:0 0 6px 16px; padding:0 0 26px 50px; border-left:1px solid var(--border); }
+  .steps > li:last-child{ border-left-color:transparent; padding-bottom:4px; }
+  .steps > li::before{ content:counter(step); position:absolute; left:-17px; top:0; width:33px; height:33px; border-radius:50%; background:var(--accent); color:#fff; display:grid; place-items:center; font-weight:700; font-size:14px; }
+  .steps h3{ margin:3px 0 6px; }
+
+  figure.shot{ margin:12px 0 4px; cursor:zoom-in; }
+  figure.shot img{ width:100%; height:auto; border:1px solid var(--border); border-radius:10px; box-shadow:var(--shadow); background:var(--bg-alt); }
+  figure.shot figcaption{ font-size:13px; color:var(--muted); margin-top:7px; }
+
+  .note, .warn{ padding:12px 14px; margin:0 0 16px; font-size:14px; border-left:3px solid; border-radius:0 8px 8px 0; color:var(--ink-soft); }
+  .note{ background:var(--accent-soft); border-color:var(--accent); }
+  .warn{ background:var(--warn-soft); border-color:var(--warn); }
+  .note b, .warn b{ color:var(--ink); }
+
+  .case{ background:var(--bg-alt); border:1px solid var(--border); border-radius:12px; margin:0 0 12px; overflow:hidden; }
+  .case-head{ padding:11px 16px; background:var(--chip-bg); font-weight:700; font-size:14.5px; }
+  .case-body{ padding:12px 16px 4px; }
+  .case-row{ display:flex; gap:10px; margin-bottom:10px; }
+  .case-row .t{ font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:2px 8px; border-radius:5px; height:fit-content; white-space:nowrap; margin-top:2px; }
+  .case-row.p .t{ background:var(--bad-soft); color:var(--bad); }
+  .case-row.f .t{ background:var(--ok-soft); color:var(--ok); }
+  .case-row p{ margin:0; font-size:14.5px; }
+
+  .flow{ margin:8px 0 14px; border:1px solid var(--border); border-radius:12px; background:var(--bg-alt); }
+  .flow-step{ display:flex; gap:14px; padding:12px 16px; border-top:1px solid var(--border); }
+  .flow-step:first-child{ border-top:none; }
+  .flow-step .n{ font-weight:700; color:var(--accent); min-width:1.4em; }
+  .flow-step .w{ display:block; font-size:12.5px; color:var(--muted); margin-top:1px; }
+
+  footer{ text-align:center; padding:44px 0 8px; color:var(--muted); font-size:13px; }
+
+  #lightbox{ position:fixed; inset:0; background:rgba(6,8,14,.86); display:none; align-items:center; justify-content:center; z-index:110; padding:24px; }
+  #lightbox.open{ display:flex; }
+  #lightbox img{ max-width:min(1300px,94vw); max-height:90vh; border-radius:10px; box-shadow:0 30px 80px rgba(0,0,0,.5); }
+
+  @media (max-width: 700px){
+    .stat-grid{ grid-template-columns:repeat(2,1fr); }
+    .steps > li{ padding-left:40px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><span class="dot"></span> Shahil Kumar Chourasia</a>
+    <a class="back" href="index.html#work">&larr; Back to work</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <span class="kicker">Flowdesk &middot; Analytics module</span>
+    <h1>Analytics and scheduled reports for an HRMS</h1>
+    <p class="lede">Seven report tabs answer the questions HR and management ask most. Each can be filtered, downloaded as Excel, emailed straight away, or scheduled to be emailed on a rhythm. This page covers how to use it, what to set up, and how the backend works.</p>
+    <div class="stat-grid">
+      <div class="stat"><b>7</b><span>report tabs over the existing modules</span></div>
+      <div class="stat"><b>3</b><span>filters shared by every tab</span></div>
+      <div class="stat"><b>10</b><span>API routes</span></div>
+      <div class="stat"><b>2</b><span>attachment types: Excel and PDF</span></div>
+    </div>
+  </div>
+
+  <section id="tabs">
+    <h2>The seven tabs</h2>
+    <p>Analytics is a read-only layer. It adds no tables for the figures. Each tab asks the existing attendance, leave, payroll, appraisal and project data a set of questions.</p>
+    <div class="tw"><table>
+      <thead><tr><th>Tab</th><th>Questions it answers</th></tr></thead>
+      <tbody>
+        <tr><td><b>Overview</b></td><td>Headcount, attrition, attendance rate, leave taken, gross payroll and rating at a glance. Six trend charts, and what is waiting on someone: leave, regularisations, reimbursements, confirmations, resignations.</td></tr>
+        <tr><td><b>Workforce</b></td><td>Joiners, leavers and net change. Attrition for the period and annualised. Headcount by department, branch and grade. Gender, employment type, age, time with the company, why people left and how long they stayed.</td></tr>
+        <tr><td><b>Attendance</b></td><td>Attendance rate, present, absent and on-leave days, average working day, absence by weekday, lowest-attendance departments, hours distribution, punch-in times, how attendance was marked, regularisations, most absent employees.</td></tr>
+        <tr><td><b>Leave</b></td><td>Requests and approved days, approval rate, requests pending over three days, usage by type and by department per employee, the weekday leave starts on, most leave taken, balance used against balance assigned.</td></tr>
+        <tr><td><b>Payroll</b></td><td>Gross and net pay, employer contributions, loss-of-pay days, payslips published, deductions by type, cost by department, pay bands and ranges by grade. Plus reimbursements: spend, approval rate and time to decide.</td></tr>
+        <tr><td><b>Performance</b></td><td>Appraisal completion, manager and self ratings and the gap between them, rating distribution, scores per key result area, rating across cycles, probation confirmations.</td></tr>
+        <tr><td><b>Projects</b></td><td>Open, overdue and unassigned tickets, completion rate, time logged, tickets by type and priority, sprint velocity, task throughput.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="use">
+    <h2>Using it</h2>
+    <ol class="steps">
+      <li>
+        <h3>Open Analytics and choose a period</h3>
+        <p>Click Analytics in the sidebar. Choose last 30 days, 3, 6 or 12 months, this financial year (April to March), or custom dates. The Performance tab also offers an appraisal cycle.</p>
+        <figure class="shot" data-full="assets/shots/analytics-overview.png"><img src="assets/shots/analytics-overview.png" alt="Analytics overview with headline figures and trends" loading="lazy"><figcaption>The Overview tab: a headline strip, trends, and what is waiting on someone. Figures come from a small development organization.</figcaption></figure>
+      </li>
+      <li>
+        <h3>Narrow by department or branch</h3>
+        <p>Both filters apply to every tab, so the same view of the organization is used throughout.</p>
+        <figure class="shot" data-full="assets/shots/analytics-workforce.png"><img src="assets/shots/analytics-workforce.png" alt="Workforce tab" loading="lazy"><figcaption>The Workforce tab: headcount, joiners and leavers, attrition by department, and the make-up of the workforce.</figcaption></figure>
+      </li>
+      <li>
+        <h3>Read the tab</h3>
+        <p>The strip at the top gives the headline figures and the charts and tables below explain them. Hover a chart to see exact values.</p>
+        <figure class="shot" data-full="assets/shots/analytics-attendance.png"><img src="assets/shots/analytics-attendance.png" alt="Attendance tab" loading="lazy"><figcaption>The Attendance tab, including how attendance was marked, so the share coming from biometric machines is visible.</figcaption></figure>
+      </li>
+      <li>
+        <h3>Take it with you</h3>
+        <p>Export to Excel, Email report and Schedule sit at the top right of every tab.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section id="email">
+    <h2>Emailing and scheduling</h2>
+    <h3>Email a report now</h3>
+    <p>The drawer starts with a summary of exactly what will be sent. The email carries the headline figures in its body and the full report as an attachment.</p>
+    <figure class="shot" data-full="assets/shots/analytics-email-drawer.png"><img src="assets/shots/analytics-email-drawer.png" alt="Email this report drawer" loading="lazy"><figcaption>Email this report.</figcaption></figure>
+    <div class="tw"><table>
+      <thead><tr><th>Field</th><th>What to enter</th></tr></thead>
+      <tbody>
+        <tr><td><b>To</b></td><td>Type a name or employee ID and pick the person, and their official email is used. Any address can also be typed. Up to 20.</td></tr>
+        <tr><td><b>Subject</b></td><td>Starts as the report name and period.</td></tr>
+        <tr><td><b>Attach as</b></td><td>Excel has every row. PDF shows the first 40 rows of each table.</td></tr>
+        <tr><td><b>Note</b></td><td>Optional text above the figures.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Schedule a report</h3>
+    <figure class="shot" data-full="assets/shots/analytics-schedule-drawer.png"><img src="assets/shots/analytics-schedule-drawer.png" alt="Scheduled reports drawer" loading="lazy"><figcaption>New schedule. The Existing tab lists schedules with their next and last run.</figcaption></figure>
+    <div class="tw"><table>
+      <thead><tr><th>Field</th><th>What to enter</th></tr></thead>
+      <tbody>
+        <tr><td><b>Name</b></td><td>Your own label.</td></tr>
+        <tr><td><b>Report</b></td><td>The tab to send.</td></tr>
+        <tr><td><b>Data covered</b></td><td>Last 7 days, 30 days, 3 months, 6 months, or the previous calendar month. The window always ends yesterday, so only finished days are included.</td></tr>
+        <tr><td><b>Repeat</b></td><td>Daily, weekly or monthly.</td></tr>
+        <tr><td><b>On</b></td><td>A weekday, or a day from 1 to 28 so a monthly schedule runs in every month.</td></tr>
+        <tr><td><b>At</b></td><td>The hour of the day, in the organization's timezone.</td></tr>
+        <tr><td><b>Send to, Attach as, Note</b></td><td>The same as for Email report.</td></tr>
+      </tbody>
+    </table></div>
+    <p>Each schedule can be sent right now, paused, resumed or deleted, and shows its next run, last run, and the reason a send failed. An organization can keep up to 25 schedules.</p>
+  </section>
+
+  <section id="setup">
+    <h2>What needs to be set up</h2>
+    <div class="tw"><table>
+      <thead><tr><th>Item</th><th>Why it matters</th></tr></thead>
+      <tbody>
+        <tr><td><b>Permission: View Analytics</b></td><td>Given to a role in Roles and Permissions. The data is organization-wide, so give it to HR and management.</td></tr>
+        <tr><td><b>Analytics in the plan</b></td><td>The module is part of the paid plans. A plan without it hides the sidebar item.</td></tr>
+        <tr><td><b>An active subscription</b></td><td>An expired subscription stops the module list refreshing, so a new module may not appear.</td></tr>
+        <tr><td><b>Email set up on the server</b></td><td>Needed for Email report and Schedule. Without it Flowdesk says so and never reports a failed send as sent.</td></tr>
+        <tr><td><b>Official emails on employees</b></td><td>Needed to pick people by name. Any address can still be typed.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="numbers">
+    <h2>How the main figures are worked out</h2>
+    <div class="tw"><table>
+      <thead><tr><th>Figure</th><th>How it is calculated</th></tr></thead>
+      <tbody>
+        <tr><td><b>Headcount</b></td><td>Employees whose status is not separate. An employee with no status counts.</td></tr>
+        <tr><td><b>Attrition</b></td><td>People who left in the period divided by the average headcount at month end. The annualised figure scales it to a year.</td></tr>
+        <tr><td><b>Attendance rate</b></td><td>Present days divided by present plus absent days. Week offs, holidays and leave are left out.</td></tr>
+        <tr><td><b>Leave taken</b></td><td>Approved leave days, counted by the month the leave starts in.</td></tr>
+        <tr><td><b>Trends</b></td><td>One point per month, and per day when the period is 62 days or less. A month with no data shows as zero.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="backend">
+    <h2>How the backend works</h2>
+    <div class="flow">
+      <div class="flow-step"><span class="n">1</span><div>HR picks a tab, a period and optional filters<span class="w">The organization always comes from the login token.</span></div></div>
+      <div class="flow-step"><span class="n">2</span><div>The API checks the permission <code>analytics_view</code><span class="w">All ten routes need it.</span></div></div>
+      <div class="flow-step"><span class="n">3</span><div>A shared view fixes who is in scope<span class="w">Current employees of the organization, filtered by department and branch, in one place.</span></div></div>
+      <div class="flow-step"><span class="n">4</span><div>The tab runs its queries in parallel<span class="w">Aggregate SQL with named parameters. A generated series of months makes empty months appear as zero.</span></div></div>
+      <div class="flow-step"><span class="n">5</span><div>JSON comes back shaped for the charts<span class="w">Export, email and schedules reuse the same function.</span></div></div>
+    </div>
+
+    <h3>Endpoints</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Route</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td class="m">GET /api/analytics/:section</td><td>One tab, with period, department and branch.</td></tr>
+        <tr><td class="m">GET /api/analytics/export/:section</td><td>An Excel workbook: a Summary sheet and one sheet per table.</td></tr>
+        <tr><td class="m">GET /api/analytics/filters</td><td>Departments, branches, cycles, today and the timezone.</td></tr>
+        <tr><td class="m">GET /api/analytics/recipients</td><td>Employees with an official email, searchable.</td></tr>
+        <tr><td class="m">POST /api/analytics/send-report</td><td>Builds Excel or PDF and emails it now.</td></tr>
+        <tr><td class="m">/api/analytics/schedules</td><td>List, create, pause or resume, send now, delete.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Scheduling without sending twice</h3>
+    <ul>
+      <li>A job runs every 15 minutes and sends whatever is due.</li>
+      <li>The next run is worked out in the organization's timezone, so 9 am means 9 am there, including across daylight saving. I checked India, New York in winter and summer, and the month rollover.</li>
+      <li>Before sending, the job moves the next-run time forward with a condition on the value it read. Only the process whose update succeeds sends, so two processes never send the same report.</li>
+      <li>A missing mail provider returns 503 and a provider rejection returns 502, so a failed send is never shown as success.</li>
+    </ul>
+
+    <h3>Frontend</h3>
+    <p>The charts are drawn by hand in SVG, with no chart library: a bar and line chart with hover values, ranked bar lists and a split bar. Axes use whole-number steps for counts. One page component holds a tab per section, with filters shared across tabs. Email and Schedule open as side drawers.</p>
+
+    <h3>Four bugs found by using it</h3>
+    <div class="case">
+      <div class="case-head">A date check that rejected every valid date</div>
+      <div class="case-body">
+        <div class="case-row p"><span class="t">Problem</span><p>The ISO date rule rewrites a value to a full timestamp before a length check, so a plain 2026-01-01 failed. It appeared only when the endpoint was called over HTTP.</p></div>
+        <div class="case-row f"><span class="t">Fix</span><p>A strict YYYY-MM-DD pattern plus a calendar check.</p></div>
+      </div>
+    </div>
+    <div class="case">
+      <div class="case-head">An axis that repeated its own labels</div>
+      <div class="case-body">
+        <div class="case-row p"><span class="t">Problem</span><p>A chart of two or three people got half-steps, and rounding printed 0, 1, 1, 2, 2.</p></div>
+        <div class="case-row f"><span class="t">Fix</span><p>When every value is a whole number the step is at least one.</p></div>
+      </div>
+    </div>
+    <div class="case">
+      <div class="case-head">The status filter that zeroed the numbers</div>
+      <div class="case-body">
+        <div class="case-row p"><span class="t">Problem</span><p>The condition <code>emp_status &lt;&gt; 'separate'</code> is false for employees with no status, so headcount, gender and age read zero.</p></div>
+        <div class="case-row f"><span class="t">Fix</span><p><code>IS DISTINCT FROM 'separate'</code> in all nine places.</p></div>
+      </div>
+    </div>
+    <div class="case">
+      <div class="case-head">A menu item that did not appear</div>
+      <div class="case-body">
+        <div class="case-row p"><span class="t">Problem</span><p>The subscription had expired, so the list of the plan's modules returned 404. The app ignored that and kept an older saved list without Analytics.</p></div>
+        <div class="case-row f"><span class="t">Fix</span><p>Extending the subscription refreshes the list. The lesson: a saved permission list that survives a failed refresh can hide a new module indefinitely.</p></div>
+      </div>
+    </div>
+
+    <h3>Limits</h3>
+    <p>Analytics is organization-wide, so a manager cannot yet be limited to their own team. Queries run live on every request. The attendance-rate axis can show a value above 100 percent when the data sits near the top, a cosmetic flaw that is still open. A schedule saves recipient addresses as they were when it was created. The screenshots come from a small development organization.</p>
+  </section>
+
+  <footer>Shahil Kumar Chourasia &middot; Flowdesk analytics &middot; screens use sample data</footer>
+</div>
+
+<div id="lightbox"><img id="lightbox-img" src="" alt=""></div>
+
+<script>
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lightbox-img');
+  document.addEventListener('click', function (e) {
+    var shot = e.target.closest('figure.shot[data-full]');
+    if (shot) {
+      lbImg.src = shot.getAttribute('data-full');
+      lb.classList.add('open');
+    } else if (e.target.closest('#lightbox')) {
+      lb.classList.remove('open');
+    }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') lb.classList.remove('open');
+  });
+</script>
+
+</body>
+</html>
